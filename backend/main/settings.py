@@ -22,7 +22,11 @@ DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = ["*"]  # Configured for development/deployment flexibility
 
- 
+ # Render provides an environment variable called RENDER
+if os.environ.get('RENDER'):
+    ALLOWED_HOSTS.append(os.environ.get('RENDER_EXTERNAL_HOSTNAME'))
+else:
+    ALLOWED_HOSTS = ['*'] # Fallback for local testing
 
 # Application definition
 
