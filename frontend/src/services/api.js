@@ -1,22 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://personalportfolio-1u0r.onrender.com/api";
-export const API_SERVER_URL = API_BASE_URL.replace(/\/api\/?$/, "");
-
-export const normalizeMediaUrl = (url) => {
-  if (!url) return '';
-  if (url.startsWith('/media/')) {
-    return `${API_SERVER_URL}${url}`;
-  }
-  if (url.includes('127.0.0.1:8000') || url.includes('localhost:8000')) {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    if (!isLocalhost) {
-      return url.replace(/http:\/\/(127\.0\.0\.1|localhost):8000/, API_SERVER_URL);
-    }
-  }
-  if (window.location.protocol === 'https:' && url.startsWith('http://') && !url.includes('localhost') && !url.includes('127.0.0.1')) {
-    return url.replace('http://', 'https://');
-  }
-  return url;
-};
+const API_BASE_URL = "https://personalportfolio-1u0r.onrender.com/api";
 
 const getHeaders = () => {
   const headers = {

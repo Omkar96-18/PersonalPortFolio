@@ -80,8 +80,7 @@ function App() {
     setShowIntro(false);
   };
 
-  const rawBase = import.meta.env.BASE_URL || '/';
-  const baseName = rawBase.length > 1 ? rawBase.replace(/\/$/, '') : rawBase;
+  const baseName = import.meta.env.BASE_URL || '/';
 
   return (
     <Router basename={baseName}>
@@ -112,8 +111,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/PersonalPortFolio" element={<Home />} />
           <Route path="/PersonalPortfolio" element={<Home />} />
-          <Route path="/PersonalPortFolio/*" element={<Home />} />
-          <Route path="/PersonalPortfolio/*" element={<Home />} />
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/admin/login" element={<AdminLogin />} />

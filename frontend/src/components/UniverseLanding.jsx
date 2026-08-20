@@ -367,15 +367,6 @@ export const UniverseLanding = ({ onEnter }) => {
     <div ref={containerRef} className="universe-landing-wrapper">
       <canvas ref={canvasRef} className="universe-canvas" />
 
-      {/* Skip Intro Button */}
-      <button 
-        onClick={onEnter} 
-        className="btn-skip-intro"
-        title="Skip intro and view portfolio immediately"
-      >
-        Skip Intro ✕
-      </button>
-
       {/* Comprehensive Astrophysics Scientific HUD Side Panel */}
       {hoveredPlanetData ? (
         <div className="planet-scientific-hud glass-panel">
@@ -434,32 +425,6 @@ export const UniverseLanding = ({ onEnter }) => {
         .universe-canvas {
           position: absolute; inset: 0;
           width: 100%; height: 100%; z-index: 1;
-        }
-
-        .btn-skip-intro {
-          position: absolute;
-          top: 24px;
-          right: 24px;
-          z-index: 100;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: #FFFFFF;
-          padding: 8px 18px;
-          border-radius: 999px;
-          font-family: var(--font-mono);
-          font-size: 0.75rem;
-          font-weight: 600;
-          letter-spacing: 0.5px;
-          cursor: pointer;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-skip-intro:hover {
-          background: var(--accent-red);
-          border-color: var(--accent-red);
-          box-shadow: 0 0 16px var(--accent-red);
-          transform: translateY(-1px);
         }
 
         .astrophysics-hud {

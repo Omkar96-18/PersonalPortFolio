@@ -24,7 +24,9 @@ export const AdminLogin = () => {
 
     try {
       await api.login(username, password);
+      // Success: redirect to dashboard
       navigate('/admin/dashboard');
+      window.location.reload();
     } catch (err) {
       console.error("Login failed", err);
       setError("Invalid username or password. Please try again.");
