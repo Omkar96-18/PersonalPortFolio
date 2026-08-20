@@ -1,0 +1,650 @@
+[
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1200000$1b81t2RJe5YcTHoHT9OuJC$rBgZk0kKH0jrS5wnUZgDM6DnQLNunFf2r0DXuTPy0dY=",
+        "last_login": "2026-07-12T11:51:25.428Z",
+        "is_superuser": true,
+        "username": "devil37",
+        "first_name": "",
+        "last_name": "",
+        "email": "devilisalways37@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-07-10T08:23:05.666Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$1200000$YcDT3vFoa3I3s6cC4PGZLF$Sw6mHl2XJvDLXisHNBRwcNaTrTgMb37eueKb5qKcT3Y=",
+        "last_login": "2026-08-01T06:06:20Z",
+        "is_superuser": true,
+        "username": "omkar0906",
+        "first_name": "",
+        "last_name": "",
+        "email": "omkarp.0906@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-07-13T17:24:02Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "5lri4c53arh4tjbvixny2fvd1lsec79s",
+    "fields": {
+        "session_data": ".eJxVjDsOwyAQBe9CHSF-CyZlep8BLSwOTiKQjF1FuXtsyUXSvpl5bxZwW0vYel7CTOzKNLv8bhHTM9cD0APrvfHU6rrMkR8KP2nnY6P8up3u30HBXvZaikFHqRwI6wC8sZi00jFBAoNW5YkUDkAZ_G469MImIwncJEFpcsg-X7JCNtw:1wq2rU:tG6ttzE_Lzt2Miag_tMgh-pVx5HGUkaH6trlACmOy7I",
+        "expire_date": "2026-08-15T06:06:20.435Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "cctuy59louo5dhb8bwlrr6bio7cmt1uq",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMRe-SGUWJQ2qHkb1nqBLb0AJqpaadEHdHkTrA-t97_22GvG_jsFddh0nMxQRz-t1K5qfODcgjz_fF8jJv61RsU-xBq-0X0df1cP8OxlzHViOETn0AxAgOYiJXuoBRkruV5BVAnDplViwpFiI6EwkTevDCqObzBbUFNyc:1wjKSR:LhZEQDJUcHg6JyicbyGybWNEC91CiIkIA4gIjsx4yus",
+        "expire_date": "2026-07-27T17:28:43.144Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "kq56enaf4lk3k4yj8qpgl4962hxyq9dt",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hCBGVCX7nsGAjODVA1NSrsy3l2bdKHb_977LxXTutS4dpnjyOqijDr8bjnRQ9oG-J7abdI0tWUes94UvdOuh4nled3dv4Oaev3W3nsSSwEYwBQWsZYDkQ1IxtgTGjBOSjoioghgAh8sugCYnSuZz-r9AdtmN28:1wisiT:uCz1qn_-IygrfElowlRjcikt642Bt0YEXN2_h5u3qWc",
+        "expire_date": "2026-07-26T11:51:25.433Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "592dc2395d81257385261f685756f2dc4402aa91",
+    "fields": {
+        "user": [
+            "omkar0906"
+        ],
+        "created": "2026-07-13T17:32:06.718Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "ce67f8e6bda6b22b2767e505c18fdebbf10f6824",
+    "fields": {
+        "user": [
+            "devil37"
+        ],
+        "created": "2026-08-02T07:40:34.434Z"
+    }
+},
+{
+    "model": "app.userprofile",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "omkar0906"
+        ],
+        "name": "Omkar Pardeshi",
+        "title": "AI/ML Engineer | Data Scientist | Backend Developer",
+        "bio": "Specializing in building high-performance backend microservices and deploying advanced agentic AI, NLP, and Deep Learning pipelines.",
+        "about_me": "### Hello World! I'm Omkar.\n\nI bridge the gap between complex machine learning architectures and scalable production backends. With expertise spanning from **Django** and **Golang** to **PyTorch**, **TensorFlow**, and **Agentic RAG pipelines (CrewAI, n8n)**, I design intelligent, automated systems.\n\n### Core Philosophy\n- **Scalability**: High-throughput microservices using FastAPI and Go.\n- **Intelligence**: Context-aware RAGs and multi-agent systems for workflow automation.\n- **Analytics**: Turning unstructured data into actionable insights using modern NLP and ML frameworks.",
+        "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=300",
+        "github_url": "https://github.com/Omkar96-18?",
+        "linkedin_url": "https://www.linkedin.com/in/omkar-pardeshi-09b7b7348/",
+        "resume_url": "http://127.0.0.1:8000/media/resumes/Foundation_OF_Art_Theory_Notes.pdf",
+        "email": "omkarp.0906@gmail.com",
+        "location": "Maharashtra, India"
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 64,
+    "fields": {
+        "name": "Python",
+        "category": "languages",
+        "proficiency": "Advanced",
+        "percentage": 80,
+        "icon": "Terminal",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/Python.svg",
+        "color_theme": "#F7DF1E",
+        "description": "### Overview & Architecture\nPrimary programming language for AI/ML engineering, systems architecture, automation scripting, and backend development.\n\n### Key Capabilities & Production Usage\n- **Advanced Language Features:** Mastered generators, decorators, context managers, async/await concurrency, and metaprogramming.\n- **Data Structures & Algorithms:** Implemented high-efficiency algorithms utilizing collections, itertools, and \functools.\n- **Packaging & Tooling:** Managed virtual environments, dependency resolution, and automated testing with Pytest.\n- **System Integration:** Built automated OS-level scripts, socket communications, and multi-threaded background workers.",
+        "order": 10
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 65,
+    "fields": {
+        "name": "Golang",
+        "category": "languages",
+        "proficiency": "Applied",
+        "percentage": 60,
+        "icon": "Code",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/Go.svg",
+        "color_theme": "#61DAFB",
+        "description": "### Overview & Architecture\nStatically typed, compiled language engineered for ultra-fast, concurrent microservices, CLI tools, and distributed network utilities.\n\n### Key Capabilities & Production Usage\n- **Concurrency with Goroutines & Channels:** Designed non-blocking worker pools and pipeline patterns for concurrent data processing.\n- **Low-Latency REST & gRPC:** Built high-throughput API gateways and RPC services with minimal memory footprint.\n- **Memory & Binary Optimization:** Compiled lightweight standalone binaries with zero external runtime dependencies.\n- **Robust Error Handling:** Followed idiomatic Go patterns for explicit error handling and deferred resource cleanup.",
+        "order": 20
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 66,
+    "fields": {
+        "name": "MySQL",
+        "category": "languages",
+        "proficiency": "Expert",
+        "percentage": 85,
+        "icon": "Database",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/MySQL.svg",
+        "color_theme": "#2496ED",
+        "description": "### Overview & Architecture\nReliable relational database management system utilized for transactional web applications, structured data storage, and reporting.\n\n### Key Capabilities & Production Usage\n- **Schema Design & Normalization:** Designed 3NF normalized database schemas optimized for high write throughput and data integrity.\n- **Indexing Strategies:** Applied B-Tree and full-text indexes to accelerate complex search and join queries.\n- **Replication & Backups:** Configured master-replica replication topologies and automated mysqldump backup routines.\n- **Stored Procedures & Triggers:** Automated business logic enforcement at the database layer.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 67,
+    "fields": {
+        "name": "JavaScript",
+        "category": "languages",
+        "proficiency": "Advanced",
+        "percentage": 85,
+        "icon": "Cpu",
+        "logo_url": null,
+        "color_theme": null,
+        "description": "### Overview & Architecture\nCore programming language of the modern web platform for asynchronous client-side scripting and interactive user interfaces.\n\n### Key Capabilities & Production Usage\n- **ES6+ Modern Syntax:** Utilized destructuring, arrow functions, modules, template literals, and optional chaining.\n- **Asynchronous Architecture:** Mastered Promises, \u0007sync/await, Event Loop microtasks, and Fetch API streaming.\n- **DOM & Event Handling:** Engineered custom event delegation, debounce/throttle handlers, and dynamic canvas rendering.\n- **Browser Storage & Security:** Handled JWT tokens in secure HttpOnly cookies, session management, and CORS policies.",
+        "order": 40
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 68,
+    "fields": {
+        "name": "Django / DRF",
+        "category": "backend",
+        "proficiency": "Expert",
+        "percentage": 85,
+        "icon": "Server",
+        "logo_url": "https://icon.icepanel.io/Technology/png-shadow-512/Django.png",
+        "color_theme": "#0C4B33",
+        "description": "### Overview & Architecture\nDjango and Django REST Framework (DRF) form the bedrock of my backend architecture for building robust, secure, and scalable RESTful APIs.\n\n### Key Capabilities & Production Usage\n- **RESTful API Engineering:** Engineered secure endpoints with token authentication (JWT), role-based permissions, and throttling.\n- **ORM Optimization:** Eliminated N+1 query bottlenecks using select_related, prefetch_related, and custom database indexes.\n- **Database Migrations:** Managed complex schema evolutions with zero-downtime migrations.\n- **Middleware & Signal Architecture:** Built custom middleware for request logging, tenant isolation, and audit trails.",
+        "order": 10
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 69,
+    "fields": {
+        "name": "FastAPI",
+        "category": "backend",
+        "proficiency": "Expert",
+        "percentage": 85,
+        "icon": "Zap",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/FastAPI.svg",
+        "color_theme": "#059669",
+        "description": "### Overview & Architecture\nHigh-performance, async Python web framework designed for low-latency AI model inference endpoints and microservice architectures.\n\n### Key Capabilities & Production Usage\n- **Asynchronous Execution:** Implemented native \u0007sync/await request lifecycles for high-concurrency I/O bound workloads.\n- **Type Safety & Pydantic V2:** Enforced strict schema validation and auto-generated interactive OpenAPI/Swagger documentation.\n- **Streaming Endpoints:** Built Server-Sent Events (SSE) and WebSocket streams for real-time LLM token generation.\n- **Dependency Injection:** Architected modular auth, database session pooling, and rate-limiting middleware.",
+        "order": 20
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 70,
+    "fields": {
+        "name": "Flask",
+        "category": "backend",
+        "proficiency": "Applied",
+        "percentage": 65,
+        "icon": "Wind",
+        "logo_url": "https://icon.icepanel.io/Technology/png-shadow-512/Flask.png",
+        "color_theme": "#33",
+        "description": "### Overview & Architecture\nLightweight, micro-web framework utilized for rapid prototyping, standalone microservices, and custom serverless functions.\n\n### Key Capabilities & Production Usage\n- **Microservices & Webhooks:** Developed modular Flask Blueprints for decoupled service architectures and webhook receivers.\n- **Custom Extensions:** Integrated Flask-SQLAlchemy, Flask-Migrate, and Flask-JWT-Extended.\n- **API Gateways:** Built lightweight routing proxies and payload transformation layers.\n- **Dockerized Deployments:** Containerized lightweight Flask instances with Gunicorn/Nginx reverse proxy configs.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 71,
+    "fields": {
+        "name": "React",
+        "category": "frontend",
+        "proficiency": "Advanced",
+        "percentage": 85,
+        "icon": "Layers",
+        "logo_url": null,
+        "color_theme": null,
+        "description": "### Overview & Architecture\nDeclarative component-based frontend library utilized for building modern, responsive, and high-performance Single Page Applications (SPAs).\n\n### Key Capabilities & Production Usage\n- **Modern State Management:** Managed complex client state using React Hooks (useState, useEffect, useCallback, useMemo) and Context API.\n- **Dynamic UI & Glassmorphism:** Engineered interactive dashboards, responsive grid systems, and custom theme switchers.\n- **Performance Optimization:** Applied code-splitting via React.lazy, memoization, and virtualized lists for large datasets.\n- **API Integration:** Implemented resilient HTTP data fetching, optimistic UI updates, and error boundary handling.",
+        "order": 10
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 72,
+    "fields": {
+        "name": "Next.js",
+        "category": "frontend",
+        "proficiency": "Intermediate",
+        "percentage": 85,
+        "icon": "Compass",
+        "logo_url": "https://icon.icepanel.io/Technology/png-shadow-512/Next.js.png",
+        "color_theme": "#336791",
+        "description": "### Overview & Architecture\nProduction-grade React framework for Server-Side Rendering (SSR), Static Site Generation (SSG), and full-stack edge routing.\n\n### Key Capabilities & Production Usage\n- **App Router & Server Components:** Architected hybrid client/server component trees minimizing client-side JavaScript bundles.\n- **SSR & SEO Optimization:** Delivered sub-second First Contentful Paint (FCP) and dynamic OpenGraph metadata generation.\n- **API Routes & Middleware:** Built edge API endpoints and authentication guards.\n- **Image & Font Optimization:** Configured automatic image optimization and zero-layout-shift web fonts.",
+        "order": 20
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 73,
+    "fields": {
+        "name": "HTML5",
+        "category": "frontend",
+        "proficiency": "Expert",
+        "percentage": 90,
+        "icon": "PenTool",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/HTML5.svg",
+        "color_theme": "#FF6F60",
+        "description": "### Overview & Architecture\nModern semantic HTML5 markup ensuring accessible, standards-compliant, and search-engine optimized web interfaces.\n\n### Key Capabilities & Production Usage\n- **Semantic Structure:** Leveraged <article>, <section>, <nav>, <aside>, and <main> for clean document outline and accessibility (a11y).\n- **Modern Web APIs:** Utilized Canvas API, LocalStorage/SessionStorage, IntersectionObserver, and Clipboard API.\n- **Responsive Media:** Implemented responsive <picture> elements, SVG vector graphics, and WebP image formats.\n- **Form Validation & Inputs:** Built accessible form controls with native validation and ARIA attributes.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 74,
+    "fields": {
+        "name": "Data Science & Analytics",
+        "category": "ai_ml",
+        "proficiency": "Expert",
+        "percentage": 85,
+        "icon": "BarChart",
+        "logo_url": null,
+        "color_theme": null,
+        "description": "### Overview & Architecture\nComprehensive data science and statistical analysis toolkit for extracting actionable insights, feature engineering, and exploratory data analysis.\n\n### Key Capabilities & Production Usage\n- **Exploratory Data Analysis (EDA):** Statistical modeling, hypothesis testing, correlation analysis, and data distribution profiling using Pandas, NumPy, and SciPy.\n- **Data Cleansing & Transformation:** Automated ETL pipelines handling missing values, outlier detection, and data normalization at scale.\n- **Visual Analytics:** Interactive dashboards and high-impact visual reports using Matplotlib, Seaborn, and Plotly.\n- **Predictive Analytics:** Time-series forecasting, clustering analysis, and multivariate regression modeling for business intelligence.",
+        "order": 10
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 75,
+    "fields": {
+        "name": "Scikit-learn",
+        "category": "ai_ml",
+        "proficiency": "Applied",
+        "percentage": 70,
+        "icon": "TrendingUp",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/scikit-learn.svg",
+        "color_theme": "#FF6F00",
+        "description": "### Overview & Architecture\nScikit-learn is the standard library for classical machine learning, statistical modeling, and automated feature engineering.\n\n### Key Capabilities & Production Usage\n- **Supervised & Unsupervised Learning:** Trained and evaluated Random Forests, Gradient Boosting (XGBoost/LightGBM), SVMs, and K-Means clustering algorithms.\n- **Feature Pipelines:** Constructed end-to-end ColumnTransformer and Pipeline workflows preventing data leakage during cross-validation.\n- **Hyperparameter Optimization:** Utilized GridSearchCV, RandomizedSearchCV, and Bayesian optimization for model tuning.\n- **Model Evaluation:** Implemented precision-recall curves, ROC-AUC, F1-scores, and confusion matrix diagnostics.",
+        "order": 20
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 76,
+    "fields": {
+        "name": "TensorFlow",
+        "category": "ai_ml",
+        "proficiency": "Advanced",
+        "percentage": 85,
+        "icon": "Grid",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/TensorFlow.svg",
+        "color_theme": "#EE4C2C",
+        "description": "### Overview & Architecture\nEnd-to-end open-source machine learning platform utilized for production model training, computer vision pipelines, and mobile edge deployment.\n\n### Key Capabilities & Production Usage\n- **Keras & Deep Architectures:** Built Convolutional Neural Networks (CNNs) and Recurrent Networks (LSTMs) for image classification and sequence modeling.\n- **TensorFlow Serving & TFLite:** Packaged trained models for high-throughput Dockerized microservices and lightweight mobile inference.\n- **Distributed Training:** Utilized \tf.distribute.Strategy for multi-GPU training clusters.\n- **TensorBoard Monitoring:** Profiled training convergence, loss curves, and tensor weight histograms.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 77,
+    "fields": {
+        "name": "PyTorch (Deep Learning)",
+        "category": "advanced_ai",
+        "proficiency": "Expert",
+        "percentage": 40,
+        "icon": "Activity",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/PyTorch.svg",
+        "color_theme": "#EE4C2C",
+        "description": "### Overview & Architecture\nPyTorch is my core deep learning framework for designing, training, and fine-tuning custom neural networks and transformer architectures.\n\n### Key Capabilities & Production Usage\n- **Transformer Fine-Tuning:** Applied LoRA, QLoRA, and PEFT to adapt open-source LLMs (Llama 3, Mistral, Gemma) on domain-specific corpora.\n- **Custom Tensor Operations & Autograd:** Built custom loss functions, embedding layers, and attention mechanisms.\n- **Performance Optimization:** Leveraged Mixed Precision (FP16/BF16), TorchScript, and ONNX Runtime export for low-latency inference on CUDA GPUs.\n- **Data Pipelines:** Engineered custom Dataset and DataLoader pipelines with multi-worker GPU streaming.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 79,
+    "fields": {
+        "name": "LangGraph",
+        "category": "advanced_ai",
+        "proficiency": "Applied",
+        "percentage": 70,
+        "icon": "Database",
+        "logo_url": "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/langgraph-color.png",
+        "color_theme": "#059669",
+        "description": "### Overview & Architecture\nLangGraph is a stateful multi-agent orchestration framework designed for complex, cyclic LLM workflows and autonomous agent graphs.\n\n### Key Capabilities & Production Usage\n- **Stateful Cyclic Graphs:** Built state-machine architectures enabling multi-step reflection, self-correction, and tool routing loops.\n- **Human-in-the-Loop:** Implemented interrupt-and-resume workflows for sensitive enterprise validation steps.\n- **Persistence & Checkpointing:** Integrated PostgreSQL/Redis checkpoints for persistent conversation memory and time-travel state debugging.\n- **Multi-Agent Coordination:** Orchestrated specialized agent teams (Planner, Coder, Reviewer) executing concurrent task graphs.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 80,
+    "fields": {
+        "name": "LangChain",
+        "category": "advanced_ai",
+        "proficiency": "Advanced",
+        "percentage": 80,
+        "icon": "Users",
+        "logo_url": "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/langchain-color.png",
+        "color_theme": "#61DAFB",
+        "description": "### Overview & Architecture\nLangChain serves as the foundational framework for building Retrieval-Augmented Generation (RAG) pipelines and conversational AI interfaces.\n\n### Key Capabilities & Production Usage\n- **Advanced RAG Pipelines:** Constructed contextual compression, hybrid search (dense + sparse BM25), and reciprocal rank fusion (RRF) retrieval systems.\n- **Custom Tool Integration:** Connected LLMs to REST APIs, SQL databases, search engines, and internal microservices.\n- **Chains & Expression Language (LCEL):** Authored composable, streamable LCEL pipelines supporting async execution and fallback routing.\n- **Document Ingestion:** Automated multi-format parsing (PDF, Markdown, HTML) with semantic chunking and metadata enrichment.",
+        "order": 40
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 81,
+    "fields": {
+        "name": "n8n",
+        "category": "tools",
+        "proficiency": "Advanced",
+        "percentage": 70,
+        "icon": "Workflow",
+        "logo_url": "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/n8n-color.png",
+        "color_theme": "#EA4B71",
+        "description": "### Overview & Architecture\nFair-code workflow automation platform utilized for connecting AI agents, databases, communication channels, and external APIs.\n\n### Key Capabilities & Production Usage\n- **AI Agent Automation:** Built automated multi-node workflows integrating LangChain, OpenAI, and vector databases with email/Slack.\n- **Custom Webhooks & Triggers:** Engineered event-driven triggers for real-time CRM updates, lead scoring, and alert routing.\n- **Data Transformation Nodes:** Authored custom JavaScript function nodes for complex JSON payload mapping and error handling.\n- **Self-Hosted Deployment:** Deployed and managed containerized n8n instances on Docker with PostgreSQL persistence.",
+        "order": 10
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 83,
+    "fields": {
+        "name": "PostgreSQL",
+        "category": "backend",
+        "proficiency": "Expert",
+        "percentage": 85,
+        "icon": "Database",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/PostgresSQL.svg",
+        "color_theme": "#3776AB",
+        "description": "### Overview & Architecture\nEnterprise-grade relational database engine and vector store utilized for mission-critical transactional data and semantic search indices.\n\n### Key Capabilities & Production Usage\n- **Vector Search (pgvector):** Engineered high-dimensional vector search indices (HNSW, IVFFlat) for similarity search in RAG pipelines.\n- **Query Optimization:** Analyzed EXPLAIN ANALYZE execution plans, optimized composite indexes, and tuned connection poolers (PgBouncer).\n- **JSONB & Advanced Data Types:** Leveraged structured JSONB querying with GIN indexes for semi-structured document storage.\n- **Data Integrity & ACID Compliance:** Enforced strict foreign key constraints, triggers, and transactional savepoints.",
+        "order": 30
+    }
+},
+{
+    "model": "app.skill",
+    "pk": 84,
+    "fields": {
+        "name": "Docker",
+        "category": "tools",
+        "proficiency": "Applied",
+        "percentage": 50,
+        "icon": "Layers",
+        "logo_url": "https://icon.icepanel.io/Technology/svg/Docker.svg",
+        "color_theme": "#00ADD8",
+        "description": "### Overview & Architecture\nIndustry-standard containerization platform for creating isolated, reproducible, and portable environments across development and production.\n\n### Key Capabilities & Production Usage\n- **Multi-Stage Dockerfiles:** Crafted slim, secure container images optimizing layer caching and minimizing image sizes.\n- **Docker Compose Orchestration:** Configured multi-container stacks (Django API, PostgreSQL, Redis, Celery, Nginx, React).\n- **Volume & Network Management:** Configured persistent storage volumes and isolated bridge networks for service communication.\n- **CI/CD Integration:** Automated container build, tagging, and registry pushes in automated deployment pipelines.",
+        "order": 40
+    }
+},
+{
+    "model": "app.project",
+    "pk": 7,
+    "fields": {
+        "title": "Agentic AI Operations Platform",
+        "slug": "agentic-ai-operations",
+        "description": "A orchestrator for web agents and workflow automation using CrewAI and n8n to automate digital workflows.",
+        "long_description": "### Agentic AI Operations Platform\n\nThis project is a state-of-the-art automation hub that connects agentic workflows (CrewAI) with visual pipeline builders (n8n) and web actions (clawbot). \n\n#### Core Features\n- **Multi-Agent Orchestration**: Utilizes CrewAI to coordinate agents with specialized tasks (research, writing, coding).\n- **Visual Workflows**: Integrates n8n for webhook parsing, scheduling, and third-party API connectivity.\n- **Backend API**: Engineered with FastAPI for async websocket triggers and high throughput.\n- **Frontend Panel**: React dashboard built with clean graphs showing real-time token usage and run histories.\n",
+        "image_url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600&h=400",
+        "github_url": "https://github.com",
+        "demo_url": "https://example.com",
+        "tech_stack": "FastAPI, CrewAI, n8n, React, PostgreSQL",
+        "order": 10
+    }
+},
+{
+    "model": "app.project",
+    "pk": 8,
+    "fields": {
+        "title": "Scalable Distributed RAG Engine",
+        "slug": "scalable-distributed-rag",
+        "description": "High-performance document indexing and Retrieval-Augmented Generation pipeline using PyTorch, PGVector, and Go.",
+        "long_description": "### Distributed RAG Engine\n\nA production-grade Retrieval-Augmented Generation (RAG) framework optimized for sub-100ms semantic search over millions of PDFs.\n\n#### Architecture\n- **Ingestion Pipeline**: Go-based worker queue that parses, cleans, and chunks text files asynchronously.\n- **Embedding Generation**: PyTorch transformer models running in batch jobs.\n- **Storage**: Supabase PostgreSQL with `pgvector` index configuration.\n- **Django Management**: Django rest framework dashboard managing collections, user API keys, and limits.\n",
+        "image_url": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=600&h=400",
+        "github_url": "https://github.com",
+        "demo_url": "",
+        "tech_stack": "Django, Golang, PyTorch, Supabase, PgVector",
+        "order": 20
+    }
+},
+{
+    "model": "app.blog",
+    "pk": 9,
+    "fields": {
+        "title": "Demystifying Agentic Workflows: CrewAI meets n8n",
+        "slug": "demystifying-agentic-workflows-crewai-n8n",
+        "excerpt": "An in-depth guide on connecting CrewAI agents with n8n visual automation to build highly interactive self-healing pipelines.",
+        "content": "### Introduction to Agentic Workflows\n\nModern automation has evolved from simple trigger-action workflows (e.g., 'If this, then that') to **autonomous agents** that can reason, choose tools, and handle errors dynamically.\n\nIn this blog post, we look at how to build an enterprise content pipeline that:\n1. Receives a topic trigger from a webhook.\n2. Uses a **n8n** workflow to coordinate steps.\n3. Delegates research and drafting to a multi-agent team via **CrewAI**.\n4. Delivers the result to a database and Slack.\n\n```python\nfrom crewai import Agent, Task, Crew\n\n# Define a research agent\nresearcher = Agent(\n    role=\"Research Analyst\",\n    goal=\"Gather precise information on tech topics\",\n    backstory=\"You are an expert researcher with a keen eye for details.\",\n    verbose=True\n)\n```\n\n#### Why CrewAI and n8n?\n- **CrewAI** is fantastic at code-level agent coordination, memory, and LLM orchestration.\n- **n8n** provides the visual structure, native integrations (Slack, Gmail, databases), and error handlers that keep systems reliable.\n\nStay tuned for part two where we deploy clawbot web agents to fetch data from gated sites!\n",
+        "cover_image_url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=600&h=400",
+        "tags": "Agentic AI, CrewAI, n8n, Python",
+        "is_published": true,
+        "created_at": "2026-07-13T17:50:43.191Z",
+        "updated_at": "2026-07-13T17:50:43.191Z"
+    }
+},
+{
+    "model": "app.blog",
+    "pk": 10,
+    "fields": {
+        "title": "FastAPI vs Golang: Selecting the backend for high-throughput AI APIs",
+        "slug": "fastapi-vs-go-high-throughput-ai",
+        "excerpt": "Analyzing latency, developer speed, and async performance for serving deep learning inference models in production.",
+        "content": "### The Dilemma: Python (FastAPI) or Go?\n\nWhen deploying Machine Learning models, we face a common architectural fork:\n- Should we write the API in **Python** (FastAPI) because our ML code (PyTorch, TensorFlow) is in Python?\n- Should we write it in **Golang** because of its concurrency model, memory safety, and raw speed?\n\n#### Performance Comparison\nBelow is a typical response-time distribution under a load of 10,000 concurrent requests:\n\n| Framework | Average Latency | Concurrency Handling | ML Library Integration |\n|-----------|-----------------|----------------------|-----------------------|\n| FastAPI   | 142ms           | Excellent (asyncio)  | Native / Direct       |\n| Go        | 12ms            | Outstanding (goroutine)| CGo / ONNX Runtime   |\n\n#### Recommended Architecture\nFor maximum efficiency, we recommend a **hybrid approach**:\n1. Use **Go** for the public gateway, authentication, rate limiting, and database connections.\n2. Deploy the **PyTorch** models inside a microservice in **FastAPI** (or Triton Inference Server).\n3. Connect them via **gRPC** or raw TCP sockets.\n",
+        "cover_image_url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=600&h=400",
+        "tags": "FastAPI, Golang, PyTorch, System Design",
+        "is_published": true,
+        "created_at": "2026-07-13T17:50:43.198Z",
+        "updated_at": "2026-07-13T17:50:43.198Z"
+    }
+},
+{
+    "model": "app.blog",
+    "pk": 11,
+    "fields": {
+        "title": "Scaling Natural Language Processing: Transformers, Vector DBs, and Agentic RAG",
+        "slug": "scaling-nlp-transformers-vector-dbs-agentic-rag",
+        "excerpt": "Exploring modern NLP pipelines: from fine-tuning transformer models with PyTorch to indexing vector embeddings for context-aware RAG agents.",
+        "content": "### The NLP Evolution: Transformers & Semantic Search\n\nToday, Natural Language Processing goes far beyond regex patterns and TF-IDF vectors. With the rise of attention-based architectures, developers can build systems that understand contextual semantics.\n\nIn this deep-dive, we look at how to construct a context-aware search engine using:\n1. **Embedding Models**: Running local sentence-transformers (PyTorch) to generate 768-dimensional document vectors.\n2. **Indexing (Vector Databases)**: Storing and indexing vectors in **PostgreSQL** using `pgvector` with HNSW indices.\n3. **Retrieval-Augmented Generation (RAG)**: Querying the database to fetch relevant documents and feeding them to an LLM for structured answers.\n\n#### Ingestion Code Sample\n\nHere is a typical workflow using PyTorch to calculate text embeddings:\n\n```python\nimport torch\nfrom transformers import AutoTokenizer, AutoModel\n\ntokenizer = AutoTokenizer.from_pretrained(\"sentence-transformers/all-MiniLM-L6-v2\")\nmodel = AutoModel.from_pretrained(\"sentence-transformers/all-MiniLM-L6-v2\")\n\ndef get_embedding(text):\n    inputs = tokenizer(text, padding=True, truncation=True, return_tensors=\"pt\")\n    with torch.no_grad():\n        outputs = model(**inputs)\n    # Mean pooling to get 1D vector\n    return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()\n```\n\n#### Structuring the Retrieval Step\nTo avoid LLM hallucinations, we inject exact matches retrieved from PGVector. By calculating the cosine distance between the user's question embedding and your cached document blocks, you retrieve highly relevant paragraphs.\n",
+        "cover_image_url": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=600&h=400",
+        "tags": "NLP, PyTorch, RAG, Python",
+        "is_published": true,
+        "created_at": "2026-07-13T17:50:43.205Z",
+        "updated_at": "2026-07-13T17:50:43.205Z"
+    }
+},
+{
+    "model": "app.blog",
+    "pk": 12,
+    "fields": {
+        "title": "Orchestrating Real-Time Computer Vision Pipelines: YOLOv8 on Edge Devices",
+        "slug": "orchestrating-cv-pipelines-yolov8-edge",
+        "excerpt": "Comparing edge inference runtimes like ONNX and TensorRT and building multi-threaded frame processing queues in Python.",
+        "content": "### Computer Vision at the Edge\n\nOrchestrating high-frame-rate (FPS) deep learning object detection models in production presents unique challenges:\n- How do we handle raw RTSP camera streams without dropping frames?\n- How do we optimize network weight sizes to run on low-power devices?\n\n#### Edge Runtime Optimization\nBefore deploying a **YOLOv8** model, compile the weights into an optimized runtime:\n\n| Weight Format | Device Target | Latency (ms) | Notes |\n|---------------|---------------|--------------|-------|\n| PyTorch (.pt) | CPU / GPU     | 45ms         | Heavy memory usage |\n| ONNX Runtime  | CPU / Intel   | 18ms         | Highly portable |\n| TensorRT      | NVIDIA Jetson | 3ms          | Maximum optimization |\n\n#### Frame Processing Queue Architecture\nNever run camera frame decoding and model inference in a single execution thread! If your model takes 30ms to infer, you will block the frame decoder, causing lag in the video stream.\n\nWe recommend a **multi-threaded architecture**:\n1. **Thread A (Decoder)**: Continuously reads frames from camera and puts them into a thread-safe Queue (dropping old frames if queue exceeds length).\n2. **Thread B (Inference)**: Pulls frames from the Queue, runs ONNX inference, and returns coordinates.\n3. **Thread C (Writer)**: Overlays labels and streams out the output.\n",
+        "cover_image_url": "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&q=80&w=600&h=400",
+        "tags": "Computer Vision, TensorFlow, ONNX, Edge AI",
+        "is_published": true,
+        "created_at": "2026-07-13T17:50:43.212Z",
+        "updated_at": "2026-07-13T17:50:43.212Z"
+    }
+},
+{
+    "model": "app.experience",
+    "pk": 7,
+    "fields": {
+        "role": "Lead AI & Backend Engineer",
+        "company": "Cognitive Systems Inc.",
+        "location": "Remote",
+        "start_date": "2024-06-01",
+        "end_date": null,
+        "is_current": true,
+        "description": "Designed and built multi-agent workflows using CrewAI and n8n to automate operations.\nDeveloped high-performance RAG query engines using FastAPI and PgVector.\nMaintained backend core platforms using Django and Go microservices.\nOptimized NLP transformer model deployments leading to 40% inference speedups.",
+        "order": 10
+    }
+},
+{
+    "model": "app.experience",
+    "pk": 8,
+    "fields": {
+        "role": "Data Scientist",
+        "company": "Insight Analytics Corp",
+        "location": "Austin, TX",
+        "start_date": "2022-03-15",
+        "end_date": "2024-05-30",
+        "is_current": false,
+        "description": "Led a team of data analysts analyzing customer churn using Deep Learning (TensorFlow).\nMaintained automated ETL data pipelines in Python and SQL.\nImplemented internal Flask and Dash tools for real-time model evaluation.",
+        "order": 20
+    }
+},
+{
+    "model": "app.experience",
+    "pk": 9,
+    "fields": {
+        "role": "Backend Engineer",
+        "company": "Explorika",
+        "location": "",
+        "start_date": "2025-07-20",
+        "end_date": "2026-07-20",
+        "is_current": false,
+        "description": "Built Backend Workflow\nBuilt API's",
+        "order": 0
+    }
+},
+{
+    "model": "app.terminalcommand",
+    "pk": 1,
+    "fields": {
+        "command": "neofetch",
+        "response": "devil37@portfolio\n----------------\nOS:      Debian GNU/Linux 12\nKernel:  6.1.0-21-amd64\nShell:   bash 5.2.15\nStack:   Django, DRF, FastAPI, Go, PyTorch\nFocus:   AI Agent Workflows & Scalable Backends",
+        "description": "System architecture overview and neofetch banner",
+        "order": 1
+    }
+},
+{
+    "model": "app.terminalcommand",
+    "pk": 2,
+    "fields": {
+        "command": "help",
+        "response": "Available commands: help, whoami, skills, projects, neofetch, clear",
+        "description": "Lists available terminal commands",
+        "order": 2
+    }
+},
+{
+    "model": "app.terminalcommand",
+    "pk": 3,
+    "fields": {
+        "command": "whoami",
+        "response": "Omkar Pardeshi - AI/ML Engineer & Backend Architect. Builds context-aware agentic systems (RAG, CrewAI) and low-latency APIs.",
+        "description": "Prints engineer background and focus",
+        "order": 3
+    }
+},
+{
+    "model": "app.terminalcommand",
+    "pk": 4,
+    "fields": {
+        "command": "skills",
+        "response": "Languages: Python, Go, SQL, Javascript\nBackend: Django, DRF, FastAPI, Flask\nAI/ML: PyTorch, TensorFlow, NLP, RAG, CrewAI\nAutomation: n8n, clawbot",
+        "description": "Prints primary technical stack",
+        "order": 4
+    }
+},
+{
+    "model": "app.terminalcommand",
+    "pk": 5,
+    "fields": {
+        "command": "projects",
+        "response": "1. Agentic AI Operations Platform (FastAPI, n8n, CrewAI)\n2. Distributed RAG Engine (Go, PyTorch, PostgreSQL)\nScroll down to 'Featured Projects' grid to review full specs!",
+        "description": "Lists featured portfolio projects",
+        "order": 5
+    }
+},
+{
+    "model": "app.contactsubmission",
+    "pk": 1,
+    "fields": {
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com",
+        "subject": "AI Collaboration Project",
+        "message": "Hi Omkar, I would like to discuss building an AI agent workflow for our enterprise system.",
+        "created_at": "2026-07-31T17:16:31.329Z"
+    }
+},
+{
+    "model": "app.contactsubmission",
+    "pk": 2,
+    "fields": {
+        "name": "Omkar",
+        "email": "devilisalways37@gmail.com",
+        "subject": "AI Workflow Collaboration",
+        "message": "Hi, Myself Devil, I want to build Rag Architecture",
+        "created_at": "2026-07-31T17:18:07.428Z"
+    }
+},
+{
+    "model": "app.contactsubmission",
+    "pk": 3,
+    "fields": {
+        "name": "Omkar Test Visitor",
+        "email": "omkarp.0906@gmail.com",
+        "subject": "Portfolio Inquiry Test",
+        "message": "Testing real SMTP email dispatch to visitor and admin alert.",
+        "created_at": "2026-07-31T17:31:23.784Z"
+    }
+},
+{
+    "model": "app.contactsubmission",
+    "pk": 4,
+    "fields": {
+        "name": "Devil",
+        "email": "devilisalways37@gmail.com",
+        "subject": "RAGS Workflow",
+        "message": "Asking for rags building application",
+        "created_at": "2026-07-31T17:33:04.121Z"
+    }
+},
+{
+    "model": "app.contactsubmission",
+    "pk": 5,
+    "fields": {
+        "name": "Omkar",
+        "email": "omkarp.0906@gmail.com",
+        "subject": "ook",
+        "message": "okay",
+        "created_at": "2026-07-31T17:42:14.291Z"
+    }
+},
+{
+    "model": "app.contactsubmission",
+    "pk": 6,
+    "fields": {
+        "name": "Omkar",
+        "email": "omkarp.0906@gmail.com",
+        "subject": "AI workflow",
+        "message": "Hello",
+        "created_at": "2026-07-31T17:44:37.511Z"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2026-08-01T06:07:28.714Z",
+        "user": [
+            "omkar0906"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "3",
+        "object_repr": "omkar0906",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Username\", \"Email address\"]}}]"
+    }
+}
+]
