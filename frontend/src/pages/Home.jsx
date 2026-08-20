@@ -175,7 +175,8 @@ export const Home = () => {
 
   const handleDownloadResume = async (e) => {
     if (e) e.preventDefault();
-    if (!profile?.resume_url) {
+    const resumeUrl = normalizeMediaUrl(profile?.resume_url);
+    if (!resumeUrl) {
       alert("Resume PDF has not been uploaded yet. Please upload it via the Admin Dashboard.");
       return;
     }
@@ -185,7 +186,7 @@ export const Home = () => {
 
     try {
       // 1. Fetch file as Blob to bypass browser inline viewer and force immediate binary download
-      const response = await fetch(profile.resume_url);
+      const response = await fetch(resumeUrl);
       if (!response.ok) throw new Error(`HTTP error ${response.status}`);
       const blob = await response.blob();
       
@@ -202,7 +203,7 @@ export const Home = () => {
       console.warn("Direct blob download failed, falling back to direct navigation download:", err);
       // Fallback: direct download link
       const link = document.createElement('a');
-      link.href = profile.resume_url;
+      link.href = resumeUrl;
       link.download = fileName;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
@@ -474,7 +475,7 @@ export const Home = () => {
                   </button>
                   {profile?.resume_url && (
                     <a 
-                      href={profile.resume_url} 
+                      href={normalizeMediaUrl(profile.resume_url)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="btn btn-secondary resume-preview-btn"

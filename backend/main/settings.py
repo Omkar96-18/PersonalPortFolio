@@ -65,12 +65,30 @@ REST_FRAMEWORK = {
     ],
 }
 
-# CORS Configuration
+# CORS & CSRF Configuration for GitHub Pages & Render Deployment
 CORS_ALLOWED_ORIGINS = [
-    origin.strip() for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",") if origin.strip()
+    "https://omkar96-18.github.io",
+    "https://personalportfolio-1u0r.onrender.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
 ]
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
+
+# Support env-defined extra origins if provided
+extra_origins = os.environ.get("CORS_ALLOWED_ORIGINS")
+if extra_origins:
+    CORS_ALLOWED_ORIGINS.extend([o.strip() for o in extra_origins.split(",") if o.strip()])
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://omkar96-18.github.io",
+    "https://personalportfolio-1u0r.onrender.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 ROOT_URLCONF = "main.urls"
 

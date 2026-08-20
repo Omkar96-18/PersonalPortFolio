@@ -4,10 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Single Page Apps for GitHub Pages URL decode -->
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+
     <!-- Primary Page Title & Favicon -->
     <title>devil37 | AI/ML Engineer & Backend Architect</title>
-    <link rel="icon" id="dynamic-favicon" type="image/svg+xml" href="/PersonalPortFolio/favicon.svg" />
-    <link rel="apple-touch-icon" id="dynamic-apple-icon" href="/PersonalPortFolio/favicon.svg" />
+    <link rel="icon" id="dynamic-favicon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" id="dynamic-apple-icon" href="./favicon.svg" />
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="Portfolio of devil37 (Omkar Pardeshi) - AI/ML Engineer & Backend Architect specializing in Agentic RAG Systems, High-Performance Microservices, Django, FastAPI, PyTorch, and Distributed Systems." />

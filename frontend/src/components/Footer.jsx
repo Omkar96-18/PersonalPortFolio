@@ -19,6 +19,9 @@ export const Footer = () => {
           <a href="https://www.linkedin.com/in/omkar-pardeshi-09b7b7348/" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="LinkedIn">
             <Linkedin size={15} />
           </a>
+          <Link to="/admin/login" className="footer-admin-link" title="Admin Portal">
+            <Settings size={14} />
+          </Link>
         </div>
       </div>
 
