@@ -13,15 +13,12 @@ export const Footer = () => {
           <p>© {new Date().getFullYear()} — Built with Precision & Performance.</p>
         </div>
         <div className="footer-right">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="GitHub">
+          <a href="https://github.com/Omkar96-18/" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="GitHub">
             <Github size={15} />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="LinkedIn">
+          <a href="https://www.linkedin.com/in/omkar-pardeshi-09b7b7348/" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="LinkedIn">
             <Linkedin size={15} />
           </a>
-          <Link to="/admin/login" className="footer-admin-link" title="Admin Portal">
-            <Settings size={13} />
-          </Link>
         </div>
       </div>
 
