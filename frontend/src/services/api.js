@@ -114,6 +114,20 @@ export const api = {
     return handleResponse(res);
   },
 
+  uploadFavicon: async (formData) => {
+    const token = localStorage.getItem("token");
+    const headers = {};
+    if (token) {
+      headers["Authorization"] = `Token ${token}`;
+    }
+    const res = await fetch(`${API_BASE_URL}/upload-favicon/`, {
+      method: "POST",
+      headers,
+      body: formData,
+    });
+    return handleResponse(res);
+  },
+
   // Skills
   getSkills: async () => {
     const res = await fetch(`${API_BASE_URL}/skills/`);

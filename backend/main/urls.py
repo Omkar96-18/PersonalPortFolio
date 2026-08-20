@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/contact/", views.ContactSubmissionView.as_view(), name="contact-submit"),
     path("api/upload-resume/", views.ResumeUploadView.as_view(), name="upload-resume"),
+    path("api/upload-favicon/", views.FaviconUploadView.as_view(), name="upload-favicon"),
     path("api/token-auth/", obtain_auth_token, name="token-auth"),
     path("api/me/", views.CurrentUserView.as_view(), name="current-user"),
 ]

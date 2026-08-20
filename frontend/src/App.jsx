@@ -8,9 +8,11 @@ import BlogList from './pages/BlogList';
 import BlogDetail from './pages/BlogDetail';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import NotFound from './pages/NotFound';
 import AntigravityBackground from './components/AntigravityBackground';
 import CustomCursor from './components/CustomCursor';
 import UniverseLanding from './components/UniverseLanding';
+import SEOHeadManager from './components/SEOHeadManager';
 
 function SmoothScrollManager() {
   const location = useLocation();
@@ -82,6 +84,7 @@ function App() {
 
   return (
     <Router basename={baseName}>
+      <SEOHeadManager />
       <SmoothScrollManager />
       <CustomCursor />
       {showIntro && <UniverseLanding onEnter={handleEnterSystem} />}
@@ -112,7 +115,7 @@ function App() {
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

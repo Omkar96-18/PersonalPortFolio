@@ -4,7 +4,7 @@ import {
   User, Code, Briefcase, BookOpen, AlertCircle, Plus, Trash2, Edit3, 
   Save, Check, RefreshCw, X, Eye, EyeOff, Image, Palette, Percent,
   Sparkles, ExternalLink, HelpCircle, Layers, Terminal, Mail, MessageSquare,
-  FileText, Upload, Download, Loader2
+  FileText, Upload, Download, Loader2, Globe
 } from 'lucide-react';
 import { api } from '../services/api';
 import { TechBrandIcon } from '../components/BrandIcons';
@@ -16,6 +16,7 @@ export const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [uploadingResume, setUploadingResume] = useState(false);
+  const [uploadingFavicon, setUploadingFavicon] = useState(false);
 
   // Loaded database items
   const [profile, setProfile]         = useState(null);
@@ -27,7 +28,11 @@ export const AdminDashboard = () => {
   const [messages, setMessages]       = useState([]);
 
   // Form states
-  const [bioForm, setBioForm] = useState({ name: '', title: '', bio: '', about_me: '', avatar_url: '', github_url: '', linkedin_url: '', resume_url: '', email: '', location: '' });
+  const [bioForm, setBioForm] = useState({ 
+    name: '', title: '', bio: '', about_me: '', avatar_url: '', 
+    favicon_url: '', site_title: '', seo_keywords: '', seo_description: '',
+    github_url: '', linkedin_url: '', resume_url: '', email: '', location: '' 
+  });
   
   // Modals / Editing / Adding states
   const [editingItem, setEditingItem] = useState(null);
@@ -134,6 +139,35 @@ export const AdminDashboard = () => {
       showToast(err.message || "Failed to upload resume PDF.", "error");
     } finally {
       setUploadingResume(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleFaviconFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingFavicon(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await api.uploadFavicon(formData);
+      if (res.file_url) {
+        setBioForm(prev => ({ ...prev, favicon_url: res.file_url }));
+        if (profile) {
+          setProfile(prev => ({ ...prev, favicon_url: res.file_url }));
+        }
+        // Update browser tab icon immediately
+        const fav = document.getElementById('dynamic-favicon');
+        if (fav) fav.href = res.file_url;
+        showToast("Head title image / Favicon uploaded and updated live! Remember to save profile changes.");
+      }
+    } catch (err) {
+      console.error("Favicon upload error", err);
+      showToast(err.message || "Failed to upload favicon image.", "error");
+    } finally {
+      setUploadingFavicon(false);
       e.target.value = '';
     }
   };
@@ -463,6 +497,95 @@ export const AdminDashboard = () => {
                       value={bioForm.resume_url || ''} 
                       onChange={(e) => setBioForm({ ...bioForm, resume_url: e.target.value })} 
                       placeholder="http://127.0.0.1:8000/media/resumes/... or https://..." 
+                    />
+                  </div>
+                </div>
+
+                {/* DEDICATED HEAD TITLE IMAGE (FAVICON) & SEO MANAGEMENT */}
+                <div className="form-section-box" style={{ background: 'rgba(128, 10, 28, 0.12)', border: '1px solid rgba(246, 36, 64, 0.25)', borderRadius: '8px', padding: '18px 20px', margin: '22px 0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+                    <label className="form-label" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: '#FFFFFF', fontWeight: 700 }}>
+                      <Globe size={16} className="accent-red-icon" /> Browser Tab Title Image (Favicon) &amp; SEO Engine
+                    </label>
+                    {bioForm.favicon_url && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img 
+                          src={bioForm.favicon_url} 
+                          alt="Current Favicon" 
+                          style={{ width: '26px', height: '26px', objectFit: 'contain', borderRadius: '4px', background: 'rgba(255,255,255,0.1)', padding: '2px', border: '1px solid rgba(246,36,64,0.4)' }} 
+                        />
+                        <a href={bioForm.favicon_url} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm" style={{ padding: '4px 10px', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <ExternalLink size={12} /> View Live Icon
+                        </a>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="form-row" style={{ alignItems: 'flex-end', gap: '14px' }}>
+                    <div className="form-group" style={{ flex: 1, margin: 0 }}>
+                      <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '6px', display: 'block' }}>
+                        Upload New Title Image / Favicon (PNG, SVG, ICO, WEBP, JPG)
+                      </label>
+                      <input 
+                        type="file" 
+                        accept="image/*,.svg,.ico,.png,.jpg,.jpeg,.webp"
+                        onChange={handleFaviconFileUpload} 
+                        disabled={uploadingFavicon}
+                        className="form-control"
+                        style={{ padding: '8px', cursor: 'pointer', background: 'rgba(0,0,0,0.4)' }}
+                      />
+                    </div>
+                    {uploadingFavicon && (
+                      <div style={{ padding: '10px 14px', background: 'rgba(246, 36, 64, 0.15)', border: '1px solid var(--accent-red)', borderRadius: '6px', fontSize: '0.8rem', color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Loader2 size={15} className="spin-icon" /> Uploading Icon...
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ marginTop: '16px' }}>
+                    <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: '6px', display: 'block' }}>
+                      Or Direct Title Image / Favicon URL
+                    </label>
+                    <input 
+                      type="url" 
+                      className="form-control" 
+                      value={bioForm.favicon_url || ''} 
+                      onChange={(e) => setBioForm({ ...bioForm, favicon_url: e.target.value })} 
+                      placeholder="https://... or /media/icons/..." 
+                    />
+                  </div>
+
+                  <div className="form-row" style={{ marginTop: '16px' }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label className="form-label" style={{ fontSize: '0.78rem' }}>Custom Browser Tab Title (SEO Title)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={bioForm.site_title || ''} 
+                        onChange={(e) => setBioForm({ ...bioForm, site_title: e.target.value })} 
+                        placeholder="e.g. devil37 | AI/ML Engineer & Backend Architect" 
+                      />
+                    </div>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label className="form-label" style={{ fontSize: '0.78rem' }}>SEO Keywords (Comma Separated)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={bioForm.seo_keywords || ''} 
+                        onChange={(e) => setBioForm({ ...bioForm, seo_keywords: e.target.value })} 
+                        placeholder="AI Engineer, RAG, PyTorch, Django, FastAPI..." 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group" style={{ marginTop: '12px', marginBottom: 0 }}>
+                    <label className="form-label" style={{ fontSize: '0.78rem' }}>SEO Meta Description (Search Engines &amp; Social Previews)</label>
+                    <textarea 
+                      className="form-control" 
+                      style={{ minHeight: '70px', fontSize: '0.85rem' }} 
+                      value={bioForm.seo_description || ''} 
+                      onChange={(e) => setBioForm({ ...bioForm, seo_description: e.target.value })} 
+                      placeholder="Engineering resilient distributed backends, intelligent multi-agent systems, and production AI architectures..." 
                     />
                   </div>
                 </div>

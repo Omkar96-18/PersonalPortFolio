@@ -276,3 +276,43 @@ class ResumeUploadView(APIView):
             "message": "Resume PDF uploaded and saved successfully!"
         }, status=status.HTTP_201_CREATED)
 
+
+class FaviconUploadView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        file_obj = request.FILES.get("file") or request.FILES.get("favicon") or request.FILES.get("icon")
+        if not file_obj:
+            return Response({"error": "No image/icon file provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        import os
+        from django.core.files.storage import default_storage
+
+        # Ensure media/icons directory exists
+        icons_dir = os.path.join(settings.MEDIA_ROOT, "icons")
+        os.makedirs(icons_dir, exist_ok=True)
+
+        safe_name = os.path.basename(file_obj.name).replace(" ", "_")
+        filename = f"icons/{safe_name}"
+
+        if default_storage.exists(filename):
+            default_storage.delete(filename)
+
+        saved_path = default_storage.save(filename, file_obj)
+        file_url = request.build_absolute_uri(settings.MEDIA_URL + saved_path)
+
+        profile = getattr(request.user, "profile", None)
+        if not profile:
+            profile = UserProfile.objects.first()
+        if profile:
+            profile.favicon_url = file_url
+            profile.save()
+
+        return Response({
+            "success": True,
+            "file_url": file_url,
+            "message": "Title image / favicon uploaded and saved successfully!"
+        }, status=status.HTTP_201_CREATED)
+
+
