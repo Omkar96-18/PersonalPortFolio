@@ -181,7 +181,7 @@ export const Home = () => {
     }
 
     setDownloadingResume(true);
-    const fileName = `${(profile?.name || 'devil37').replace(/\s+/g, '_')}_Resume.pdf`;
+    const fileName = `${(profile?.name || 'Omkar Pardeshi').replace(/\s+/g, '_')}_Resume.pdf`;
 
     try {
       // 1. Fetch file as Blob to bypass browser inline viewer and force immediate binary download

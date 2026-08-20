@@ -28,7 +28,9 @@ export const Navbar = () => {
     setIsOpen(false);
     const targetId = sectionId.replace('#', '');
     
-    if (location.pathname !== '/') {
+    const isHome = location.pathname === '/' || location.pathname === '/PersonalPortFolio' || location.pathname === '/PersonalPortfolio';
+    
+    if (!isHome) {
       navigate('/' + sectionId);
     } else {
       const el = document.getElementById(targetId);
@@ -49,7 +51,7 @@ export const Navbar = () => {
   return (
     <header className="navbar-fixed-outer">
       <nav className={`navbar-floating-capsule ${isScrolled ? 'scrolled' : ''}`}>
-        <Link to="/PersonalPortfolio" className="navbar-logo" onClick={() => setIsOpen(false)}>
+        <Link to="/" className="navbar-logo" onClick={() => setIsOpen(false)}>
           <Code2 className="logo-icon" size={18} />
           <span className="logo-text">devil<span className="logo-accent">37</span></span>
         </Link>

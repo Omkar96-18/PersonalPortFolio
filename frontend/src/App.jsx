@@ -44,13 +44,24 @@ function SmoothScrollManager() {
     };
   }, []);
 
-  // Handle route change scrolling seamlessly
+  // Handle route change scrolling seamlessly with element retry
   useEffect(() => {
     if (location.hash) {
-      const target = document.querySelector(location.hash);
-      if (target && window.lenis) {
-        window.lenis.scrollTo(target, { offset: -70, duration: 1.1 });
-      }
+      const scrollWithRetry = (attempts = 0) => {
+        const target = document.querySelector(location.hash);
+        if (target) {
+          if (window.lenis) {
+            window.lenis.scrollTo(target, { offset: -70, duration: 1.1 });
+          } else {
+            const yOffset = -70;
+            const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        } else if (attempts < 8) {
+          setTimeout(() => scrollWithRetry(attempts + 1), 80);
+        }
+      };
+      scrollWithRetry();
     } else {
       window.lenis?.scrollTo(0, { immediate: true });
     }
@@ -67,8 +78,10 @@ function App() {
     setShowIntro(false);
   };
 
+  const baseName = import.meta.env.BASE_URL || '/';
+
   return (
-    <Router>
+    <Router basename={baseName}>
       <SmoothScrollManager />
       <CustomCursor />
       {showIntro && <UniverseLanding onEnter={handleEnterSystem} />}
@@ -92,11 +105,14 @@ function App() {
       />
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/PersonalPortFolio" element={<Home />} />
+          <Route path="/PersonalPortfolio" element={<Home />} />
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="*" element={<Home />} />
         </Routes>
       </main>
       <Footer />
