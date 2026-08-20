@@ -154,14 +154,38 @@ const TerminalMock = () => {
   );
 };
 
+const DEFAULT_PROFILE = {
+  name: "Omkar Pardeshi",
+  title: "AI/ML Engineer | Backend Architect | Data Scientist",
+  bio: "Architecting context-aware AI systems, high-performance distributed backends, and low-latency microservices with Python, PyTorch, Django, and FastAPI.",
+  about_me: `### Systems & AI Architecture\n\nI specialize in designing and engineering end-to-end intelligent systems, distributed backend infrastructure, and scalable Machine Learning pipelines.\n\n- **Agentic AI & RAG:** Multi-agent workflows with CrewAI, LangChain, and dense vector embeddings.\n- **Distributed Systems:** High-throughput APIs with Django REST Framework, FastAPI, and Go.\n- **Data Engineering:** High-volume pipelines with PostgreSQL, Redis, pgvector, and PyTorch.`,
+  avatar_url: "",
+  github_url: "https://github.com/Omkar96-18/",
+  linkedin_url: "https://www.linkedin.com/in/omkar-pardeshi-09b7b7348/",
+  resume_url: "https://personalportfolio-1u0r.onrender.com/media/resumes/Omkar_Pardeshi_Resume.pdf",
+  email: "omkarpardeshi37@gmail.com",
+  location: "Pune, India"
+};
+
+const DEFAULT_SKILLS = [
+  { id: 1, name: "Python", category: "languages", proficiency: "Expert", percentage: 95, icon: "Code", color_theme: "#F62440", description: "Core language for AI/ML and distributed backend engineering." },
+  { id: 2, name: "PyTorch & Deep Learning", category: "ai_ml", proficiency: "Advanced", percentage: 90, icon: "BrainCircuit", color_theme: "#F62440", description: "Neural network architecture design, fine-tuning, and model deployment." },
+  { id: 3, name: "Django & DRF", category: "backend", proficiency: "Expert", percentage: 94, icon: "Server", color_theme: "#F62440", description: "Robust REST APIs, ORM optimization, and authentication systems." },
+  { id: 4, name: "FastAPI", category: "backend", proficiency: "Advanced", percentage: 92, icon: "Zap", color_theme: "#F62440", description: "Asynchronous microservices with high throughput and low latency." },
+  { id: 5, name: "Agentic RAG & LangChain", category: "advanced_ai", proficiency: "Advanced", percentage: 90, icon: "Cpu", color_theme: "#F62440", description: "Context-aware retrieval, multi-agent frameworks with CrewAI and pgvector." },
+  { id: 6, name: "PostgreSQL & Vector DBs", category: "backend", proficiency: "Advanced", percentage: 88, icon: "Database", color_theme: "#F62440", description: "Relational database modeling, query tuning, and pgvector embeddings." },
+  { id: 7, name: "Docker & CI/CD", category: "tools", proficiency: "Proficient", percentage: 85, icon: "GitBranch", color_theme: "#F62440", description: "Containerized deployments and automated delivery pipelines." },
+  { id: 8, name: "React & Modern UI", category: "frontend", proficiency: "Proficient", percentage: 82, icon: "Layers", color_theme: "#F62440", description: "Interactive frontend interfaces with smooth animation and state management." }
+];
+
 export const Home = () => {
   const location  = useLocation();
-  const [profile, setProfile]         = useState(null);
-  const [skills, setSkills]           = useState([]);
+  const [profile, setProfile]         = useState(DEFAULT_PROFILE);
+  const [skills, setSkills]           = useState(DEFAULT_SKILLS);
   const [projects, setProjects]       = useState([]);
   const [experiences, setExperiences] = useState([]);
   const [blogs, setBlogs]             = useState([]);
-  const [loading, setLoading]         = useState(true);
+  const [loading, setLoading]         = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [skillSearch, setSkillSearch]       = useState('');
   const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
@@ -252,16 +276,18 @@ export const Home = () => {
 
   useEffect(() => {
     Promise.all([
-      api.getProfile(), api.getSkills(), api.getProjects(),
-      api.getExperiences(), api.getBlogs()
+      api.getProfile().catch(() => null),
+      api.getSkills().catch(() => []),
+      api.getProjects().catch(() => []),
+      api.getExperiences().catch(() => []),
+      api.getBlogs().catch(() => [])
     ]).then(([p, s, pr, ex, bl]) => {
-      setProfile(p);
-      setSkills(s || []);
-      setProjects(pr || []);
-      setExperiences(ex || []);
-      setBlogs((bl || []).slice(0, 3));
-    }).catch(err => console.error('Failed to load portfolio data', err))
-      .finally(() => setLoading(false));
+      if (p) setProfile(p);
+      if (s && s.length > 0) setSkills(s);
+      if (pr && pr.length > 0) setProjects(pr);
+      if (ex && ex.length > 0) setExperiences(ex);
+      if (bl && bl.length > 0) setBlogs(bl.slice(0, 3));
+    }).catch(err => console.error('Failed to load portfolio data', err));
   }, []);
 
   const handleContactSubmit = async (e) => {
@@ -291,13 +317,6 @@ export const Home = () => {
       setSendingContact(false);
     }
   };
-
-  if (loading) return (
-    <div className="loader-container">
-      <div className="loader" />
-      <p>Syncing system database...</p>
-    </div>
-  );
 
   const categories = {
     all: "Show All",
