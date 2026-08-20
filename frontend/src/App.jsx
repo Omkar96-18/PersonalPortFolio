@@ -92,7 +92,7 @@ function App() {
       />
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/PersonalPortFolio" element={<Home />} />
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/admin/login" element={<AdminLogin />} />
