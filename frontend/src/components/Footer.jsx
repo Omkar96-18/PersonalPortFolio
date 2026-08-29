@@ -13,7 +13,7 @@ export const Footer = () => {
           <p>© {new Date().getFullYear()} — Built with Precision & Performance.</p>
         </div>
         <div className="footer-right">
-          <a href="https://github.com/Omkar96-18/" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="GitHub">
+          <a href="https://github.com/omkar96-18/" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="GitHub">
             <Github size={15} />
           </a>
           <a href="https://www.linkedin.com/in/omkar-pardeshi-09b7b7348/" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="LinkedIn">

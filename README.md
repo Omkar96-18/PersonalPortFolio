@@ -175,7 +175,7 @@ Frontend is at: `http://localhost:5173/PersonalPortFolio/`
 | `DEBUG` | `False` |
 | `SECRET_KEY` | A long random string (e.g. from [djecrety.ir](https://djecrety.ir)) |
 | `ALLOWED_HOSTS` | `*` |
-| `CORS_ALLOWED_ORIGINS` | `https://Omkar96-18.github.io,http://localhost:5173` |
+| `CORS_ALLOWED_ORIGINS` | `https://omkar96-18.github.io,http://localhost:5173` |
 | `DATABASE_URL` | Your PostgreSQL URI (Supabase / Render Postgres / Neon) |
 | `EMAIL_ADDRESS` | Your Gmail address |
 | `EMAIL_PASS` | Your [Google App Password](https://myaccount.google.com/apppasswords) |
@@ -239,7 +239,7 @@ This pushes `dist/` to the `gh-pages` branch of your repository.
 **5. Enable GitHub Pages:**
 - Go to your repo on GitHub → **Settings → Pages**
 - Set **Source** to `gh-pages` branch, root `/`
-- Your site will be live at: `https://Omkar96-18.github.io/PersonalPortFolio/`
+- Your site will be live at: `https://omkar96-18.github.io/PersonalPortFolio/`
 
 > **Important:** The `public/404.html` file is already included to fix direct navigation to routes like `/admin/dashboard`. It redirects through the SPA so React Router handles the URL correctly.
 
@@ -331,7 +331,7 @@ Also update the `404.html` `segmentCount` if your repo depth changes.
 ### ✅ DO
 
 - **Use HTTPS everywhere** — mix of HTTP/HTTPS triggers browser mixed-content blocking. Render and GitHub Pages both provide HTTPS automatically.
-- **Add `https://Omkar96-18.github.io` to `CORS_ALLOWED_ORIGINS`** in Render environment variables.
+- **Add `https://omkar96-18.github.io` to `CORS_ALLOWED_ORIGINS`** in Render environment variables.
 - **Use PostgreSQL** for production (Render Postgres / Supabase) — SQLite data is wiped on every Render deployment restart.
 - **Use Google App Passwords** for SMTP — regular Gmail passwords won't work with 2FA enabled.
 - **Rebuild and redeploy frontend** after any change to `VITE_API_BASE_URL`.
