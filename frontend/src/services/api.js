@@ -1,8 +1,7 @@
 // Dynamic API Base URL resolution with fallback support
 const ENV_API_URL = import.meta.env.VITE_API_BASE_URL;
-const DEFAULT_DEV_URL = "http://127.0.0.1:8000/api";
 
-const rawUrl = ENV_API_URL || DEFAULT_DEV_URL;
+const rawUrl = ENV_API_URL;
 export const API_BASE_URL = rawUrl.replace(/\/+$/, "");
 
 const getHeaders = () => {
