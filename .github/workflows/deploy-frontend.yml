@@ -29,6 +29,7 @@ jobs:
       - name: Create .env file
         run: npm run build
         env:
+          # Adding the VITE_API_BASE_URL
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
       - name: Install Dependencies
