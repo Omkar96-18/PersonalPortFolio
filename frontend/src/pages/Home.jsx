@@ -173,45 +173,24 @@ export const Home = () => {
   const [contactStatus, setContactStatus]   = useState({ type: '', message: '' });
   const [downloadingResume, setDownloadingResume] = useState(false);
 
-  const handleDownloadResume = async (e) => {
+  const handleDownloadResume = (e) => {
     if (e) e.preventDefault();
     if (!profile?.resume_url) {
       alert("Resume PDF has not been uploaded yet. Please upload it via the Admin Dashboard.");
       return;
     }
-
     setDownloadingResume(true);
-    const fileName = `${(profile?.name || 'Omkar Pardeshi').replace(/\s+/g, '_')}_Resume.pdf`;
-
-    try {
-      // 1. Fetch file as Blob to bypass browser inline viewer and force immediate binary download
-      const response = await fetch(profile.resume_url);
-      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-      const blob = await response.blob();
-      
-      // 2. Create local object URL for clean download trigger
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => window.URL.revokeObjectURL(blobUrl), 2000);
-    } catch (err) {
-      console.warn("Direct blob download failed, falling back to direct navigation download:", err);
-      // Fallback: direct download link
-      const link = document.createElement('a');
-      link.href = profile.resume_url;
-      link.download = fileName;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } finally {
-      setTimeout(() => setDownloadingResume(false), 700);
-    }
+    // Use the dedicated server-side download endpoint that sets Content-Disposition: attachment
+    // This avoids all CORS / blob fetch issues and works from both local media and external URLs
+    const downloadUrl = api.getResumeDownloadUrl();
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `${(profile?.name || 'Omkar_Pardeshi').replace(/\s+/g, '_')}_Resume.pdf`;
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => setDownloadingResume(false), 1200);
   };
 
   useEffect(() => {
@@ -474,7 +453,7 @@ export const Home = () => {
                   </button>
                   {profile?.resume_url && (
                     <a 
-                      href={profile.resume_url} 
+                      href={api.getResumeViewUrl()}
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="btn btn-secondary resume-preview-btn"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Code2, Menu, X, Sun, Moon } from 'lucide-react';
+import { Code2, Menu, X, Sun, Moon, ShieldCheck } from 'lucide-react';
+import { api } from '../services/api';
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -8,6 +9,18 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+
+  // Quick keyboard shortcut for admin access: Ctrl + Shift + A
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        navigate(api.isAuthenticated() ? '/admin/dashboard' : '/admin/login');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -86,6 +99,9 @@ export const Navbar = () => {
             <a href="#experience" onClick={e => handleNavClick(e, '#experience')} className="mobile-link">History</a>
             <a href="#contact"    onClick={e => handleNavClick(e, '#contact')}    className="mobile-link">Contact</a>
             <Link to="/blogs" onClick={() => setIsOpen(false)} className={`mobile-link ${isActive('/blogs')}`}>Blog Articles</Link>
+            <Link to="/admin/login" onClick={() => setIsOpen(false)} className="mobile-link" style={{ color: 'var(--accent-red)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ShieldCheck size={16} /> Admin Portal
+            </Link>
           </div>
         </>
       )}

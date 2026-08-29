@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { 
   User, Code, Briefcase, BookOpen, AlertCircle, Plus, Trash2, Edit3, 
   Save, Check, RefreshCw, X, Eye, EyeOff, Image, Palette, Percent,
   Sparkles, ExternalLink, HelpCircle, Layers, Terminal, Mail, MessageSquare,
-  FileText, Upload, Download, Loader2, Globe
+  FileText, Upload, Download, Loader2, Globe, LogOut
 } from 'lucide-react';
 import { api } from '../services/api';
 import { TechBrandIcon } from '../components/BrandIcons';
@@ -362,6 +362,11 @@ export const AdminDashboard = () => {
     '#00ADD8', '#EE4C2C', '#FF6F00', '#336791', '#2496ED', '#F7DF1E', '#EA4B71'
   ];
 
+  const handleLogout = () => {
+    api.logout();
+    navigate('/admin/login');
+  };
+
   if (loading) {
     return (
       <div className="loader-container">
@@ -379,8 +384,15 @@ export const AdminDashboard = () => {
           <p className="admin-subtitle">Manage, customize, and publish content across your portfolio in real-time</p>
         </div>
         <div className="admin-actions">
-          <button onClick={loadData} className="btn btn-secondary btn-sm"><RefreshCw size={14} /> Refresh</button>
-          <a href="/" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm"><ExternalLink size={14} /> View Website</a>
+          <button onClick={loadData} className="btn btn-secondary btn-sm" title="Reload data from database">
+            <RefreshCw size={14} /> Refresh
+          </button>
+          <Link to="/" className="btn btn-secondary btn-sm" title="Go to live portfolio website">
+            <ExternalLink size={14} /> View Website
+          </Link>
+          <button onClick={handleLogout} className="btn btn-primary btn-sm" title="Log out from admin portal">
+            <LogOut size={14} /> Logout
+          </button>
         </div>
       </div>
 

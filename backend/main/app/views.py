@@ -316,3 +316,97 @@ class FaviconUploadView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class ResumeDownloadView(APIView):
+    """
+    Public endpoint: GET /api/resume/download/
+    Serves the stored resume PDF as a binary attachment (forces OS download dialog).
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        import os
+        import mimetypes
+        from django.http import FileResponse, Http404
+
+        profile = UserProfile.objects.first()
+        if not profile or not profile.resume_url:
+            raise Http404("Resume PDF has not been uploaded yet.")
+
+        resume_url = profile.resume_url
+
+        # If stored as an absolute media URL, extract the relative path
+        if resume_url.startswith("http"):
+            from urllib.parse import urlparse
+            parsed = urlparse(resume_url)
+            # Strip the leading /media/ prefix to get the relative path
+            relative_path = parsed.path.replace(settings.MEDIA_URL, "", 1).lstrip("/")
+        else:
+            relative_path = resume_url.lstrip("/")
+            if relative_path.startswith("media/"):
+                relative_path = relative_path[len("media/"):]
+
+        file_path = os.path.join(settings.MEDIA_ROOT, relative_path)
+
+        if not os.path.exists(file_path):
+            raise Http404("Resume file not found on server.")
+
+        safe_name = os.path.basename(file_path)
+        display_name = f"{(profile.name or 'Resume').replace(' ', '_')}_Resume.pdf"
+
+        content_type, _ = mimetypes.guess_type(file_path)
+        content_type = content_type or "application/pdf"
+
+        response = FileResponse(
+            open(file_path, "rb"),
+            content_type=content_type,
+            as_attachment=True,
+            filename=display_name,
+        )
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Cache-Control"] = "no-cache"
+        return response
+
+
+class ResumeViewView(APIView):
+    """
+    Public endpoint: GET /api/resume/view/
+    Serves the stored resume PDF inline in the browser viewer (no download, no CORS).
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        import os
+        import mimetypes
+        from django.http import FileResponse, Http404
+
+        profile = UserProfile.objects.first()
+        if not profile or not profile.resume_url:
+            raise Http404("Resume PDF has not been uploaded yet.")
+
+        resume_url = profile.resume_url
+
+        if resume_url.startswith("http"):
+            from urllib.parse import urlparse
+            parsed = urlparse(resume_url)
+            relative_path = parsed.path.replace(settings.MEDIA_URL, "", 1).lstrip("/")
+        else:
+            relative_path = resume_url.lstrip("/")
+            if relative_path.startswith("media/"):
+                relative_path = relative_path[len("media/"):]
+
+        file_path = os.path.join(settings.MEDIA_ROOT, relative_path)
+
+        if not os.path.exists(file_path):
+            raise Http404("Resume file not found on server.")
+
+        content_type, _ = mimetypes.guess_type(file_path)
+        content_type = content_type or "application/pdf"
+
+        response = FileResponse(
+            open(file_path, "rb"),
+            content_type=content_type,
+            as_attachment=False,  # inline view
+        )
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Cache-Control"] = "no-cache"
+        return response

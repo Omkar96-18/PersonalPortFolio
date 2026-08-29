@@ -66,11 +66,35 @@ REST_FRAMEWORK = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    origin.strip() for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",") if origin.strip()
-]
-if DEBUG:
+cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://omkar96-18.github.io",
+        "https://Omkar96-18.github.io",
+    ]
+
+# If CORS_ALLOW_ALL_ORIGINS is explicitly True or in DEBUG mode
+if os.environ.get("CORS_ALLOW_ALL_ORIGINS", "").lower() == "true" or DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
 ROOT_URLCONF = "main.urls"
 

@@ -60,6 +60,37 @@
       ]
     }
     </script>
+
+    <!-- GitHub Pages SPA Redirect Receiver -->
+    <!-- Matches the 404.html redirect so React Router can handle direct deep links (e.g. /admin/dashboard) -->
+    <script>
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+        // Also handle the ?p= query param redirect from 404.html
+        var l = window.location;
+        if (l.search[1] === 'p' && l.search.indexOf('p=/') === 1) {
+          var decoded = l.search.slice(1).split('&').reduce(function(p, c) {
+            var d = c.split('=');
+            if (d[0] === 'p')  p.pathname = '/' + d.slice(1).join('=').replace(/~and~/g, '&');
+            if (d[0] === 'q')  p.search   = '?' + d.slice(1).join('=').replace(/~and~/g, '&');
+            if (d[0] === 'h')  p.hash     = d.slice(1).join('=');
+            return p;
+          }, {pathname: null, search: null, hash: l.hash});
+          if (decoded.pathname !== null) {
+            history.replaceState(null, null,
+              l.pathname.slice(0, l.pathname.indexOf('/', 1) + 1) +
+              decoded.pathname.slice(1) +
+              (decoded.search || '') +
+              (decoded.hash || '')
+            );
+          }
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

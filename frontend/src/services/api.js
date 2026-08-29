@@ -1,4 +1,9 @@
-const API_BASE_URL = "https://personalportfolio-1u0r.onrender.com/api";
+// Dynamic API Base URL resolution with fallback support
+const ENV_API_URL = import.meta.env.VITE_API_BASE_URL;
+const DEFAULT_DEV_URL = "http://127.0.0.1:8000/api";
+
+const rawUrl = ENV_API_URL || DEFAULT_DEV_URL;
+export const API_BASE_URL = rawUrl.replace(/\/+$/, "");
 
 const getHeaders = () => {
   const headers = {
@@ -127,6 +132,11 @@ export const api = {
     });
     return handleResponse(res);
   },
+
+  // Resume URL helpers — these return the direct server-side endpoint URLs for download and view
+  // These are pure URL strings (not async), suitable for href or window.open usage
+  getResumeDownloadUrl: () => `${API_BASE_URL}/resume/download/`,
+  getResumeViewUrl: () => `${API_BASE_URL}/resume/view/`,
 
   // Skills
   getSkills: async () => {
