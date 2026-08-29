@@ -1,5 +1,6 @@
 // Dynamic API Base URL resolution with fallback support
 const ENV_API_URL = import.meta.env.VITE_API_BASE_URL;
+console.log(ENV_API_URL)
 
 const rawUrl = ENV_API_URL;
 export const API_BASE_URL = rawUrl.replace(/\/+$/, "");
