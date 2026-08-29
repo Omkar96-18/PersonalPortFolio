@@ -99,9 +99,6 @@ export const AdminLogin = () => {
         </form>
 
         <div className="login-footer-info">
-          <span className="api-endpoint-badge">
-            <Server size={12} /> Target API: {API_BASE_URL}
-          </span>
           <p className="hint-text">
             To create or reset credentials, run: <code>python manage.py createsuperuser</code>
           </p>

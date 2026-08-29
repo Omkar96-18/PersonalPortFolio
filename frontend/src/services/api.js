@@ -79,6 +79,14 @@ export const api = {
     return Array.isArray(data) ? data : (data.results || []);
   },
 
+  deleteContactMessage: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/messages/${id}/`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    return handleResponse(res);
+  },
+
   // Profile / Bio
   getProfile: async () => {
     const res = await fetch(`${API_BASE_URL}/profiles/`);

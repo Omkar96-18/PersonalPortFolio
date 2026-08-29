@@ -175,13 +175,25 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # SMTP Email Configuration (Supports EMAIL_ADDRESS / EMAIL_PASS and standard EMAIL_HOST_USER / EMAIL_HOST_PASSWORD)
 EMAIL_HOST_USER = (os.environ.get("EMAIL_ADDRESS") or os.environ.get("EMAIL_HOST_USER") or "").strip()
-EMAIL_HOST_PASSWORD = (os.environ.get("EMAIL_PASS") or os.environ.get("EMAIL_HOST_PASSWORD") or "").strip()
+raw_password = (os.environ.get("EMAIL_PASS") or os.environ.get("EMAIL_HOST_PASSWORD") or "").strip()
+# Remove accidental spaces from copied 16-character Google App Passwords
+EMAIL_HOST_PASSWORD = raw_password.replace(" ", "") if (len(raw_password) >= 16 and " " in raw_password) else raw_password
 
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com").strip()
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT") or 587)
 
 use_tls_env = os.environ.get("EMAIL_USE_TLS", "").strip()
-EMAIL_USE_TLS = use_tls_env.lower() == "true" if use_tls_env else True
+use_ssl_env = os.environ.get("EMAIL_USE_SSL", "").strip()
+
+if use_ssl_env.lower() == "true" or EMAIL_PORT == 465:
+    EMAIL_USE_SSL = True
+    EMAIL_USE_TLS = False
+else:
+    EMAIL_USE_SSL = False
+    EMAIL_USE_TLS = use_tls_env.lower() == "true" if use_tls_env else True
+
+# Set connection timeout to 10 seconds to avoid request hang
+EMAIL_TIMEOUT = 10
 
 if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
     EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend").strip()

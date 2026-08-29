@@ -322,6 +322,17 @@ export const AdminDashboard = () => {
     }
   };
 
+  const deleteMessage = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this visitor message?")) return;
+    try {
+      await api.deleteContactMessage(id);
+      setMessages(messages.filter(m => m.id !== id));
+      showToast("Visitor inquiry message deleted.");
+    } catch (err) {
+      showToast("Failed to delete visitor message.", "error");
+    }
+  };
+
   const closeForms = () => {
     setEditingItem(null);
     setAddingItem(null);
@@ -652,6 +663,7 @@ export const AdminDashboard = () => {
                         <th>Subject</th>
                         <th>Message Content</th>
                         <th>Submitted Date</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -659,7 +671,7 @@ export const AdminDashboard = () => {
                         <tr key={msg.id}>
                           <td><strong>{msg.name}</strong></td>
                           <td>
-                            <a href={`mailto:${msg.email}`} style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
+                            <a href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject || 'Portfolio Inquiry')}`} style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
                               {msg.email}
                             </a>
                           </td>
@@ -673,6 +685,24 @@ export const AdminDashboard = () => {
                             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                               {new Date(msg.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                             </span>
+                          </td>
+                          <td>
+                            <div className="actions-cell">
+                              <a 
+                                href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject || 'Portfolio Inquiry')}`} 
+                                className="action-btn edit-action" 
+                                title="Reply via Email Client"
+                              >
+                                <Mail size={14} />
+                              </a>
+                              <button 
+                                onClick={() => deleteMessage(msg.id)} 
+                                className="action-btn delete-action" 
+                                title="Delete Message"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

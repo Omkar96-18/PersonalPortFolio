@@ -137,7 +137,7 @@ class TerminalCommandViewSet(viewsets.ModelViewSet):
 class ContactSubmissionViewSet(viewsets.ModelViewSet):
     queryset = ContactSubmission.objects.all()
     serializer_class = ContactSubmissionSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
 class ContactSubmissionView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -154,7 +154,7 @@ class ContactSubmissionView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # 1. Save submission to database
+        # 1. Save submission to database (guarantees data persistence)
         submission = ContactSubmission.objects.create(
             name=name,
             email=email,
@@ -162,8 +162,9 @@ class ContactSubmissionView(APIView):
             message=message
         )
 
-        # 2. Dispatch Thank-You Confirmation Email to Visitor via SMTP
+        # 2. Dispatch Confirmation Email to Visitor & Alert to Admin via SMTP
         email_sent = False
+        smtp_error = None
         try:
             visitor_subject = f"Thank you for getting in touch, {name}! [devil37 Portfolio]"
             visitor_text = f"Hi {name},\n\nThank you for reaching out! I have received your message regarding '{subject}' and will get back to you shortly.\n\nYour Submitted Message:\n{message}\n\nBest regards,\nOmkar Pardeshi (devil37)\nAI/ML Engineer & Backend Architect"
@@ -187,7 +188,7 @@ class ContactSubmissionView(APIView):
     <!-- Message Data Box -->
     <div style="background: rgba(255,255,255,0.04); border-left: 3px solid #F62440; padding: 16px 20px; border-radius: 6px; margin: 20px 0; color: #CBD5E1; font-size: 14px;">
       <strong style="color: #F62440; font-family: monospace; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">> YOUR SUBMITTED MESSAGE:</strong>
-      <span style="font-style: italic;">{message.replace('\n', '<br/>')}</span>
+      <span style="font-style: italic;">{message.replace(chr(10), '<br/>')}</span>
     </div>
     
     <p style="color: #94A3B8; font-size: 15px; margin-bottom: 30px;">I will carefully review your notes and you can expect a thoughtful reply from me at <strong>{email}</strong> very soon. Thank you again for your time!</p>
@@ -202,6 +203,7 @@ class ContactSubmissionView(APIView):
 </div>
             """
 
+            # Send visitor confirmation
             visitor_msg = EmailMultiAlternatives(
                 subject=visitor_subject,
                 body=visitor_text,
@@ -212,26 +214,35 @@ class ContactSubmissionView(APIView):
             visitor_msg.send(fail_silently=False)
             email_sent = True
 
-            # Also notify admin / site owner if email_host_user is available
-            if settings.EMAIL_HOST_USER and settings.EMAIL_HOST_USER != email:
-                admin_subject = f"[New Visitor Inquiry] {name} sent a message regarding '{subject}'"
-                admin_text = f"New Inquiry Received!\n\nName: {name}\nEmail: {email}\nSubject: {subject}\n\nMessage:\n{message}"
+            # Send admin notification (with Reply-To set to visitor's email for 1-click reply)
+            admin_recipient = settings.EMAIL_HOST_USER or os.environ.get("EMAIL_ADDRESS")
+            if admin_recipient:
+                admin_subject = f"[New Visitor Inquiry] {name} - {subject}"
+                admin_text = f"New Message Received from Portfolio!\n\nVisitor Name: {name}\nVisitor Email: {email}\nSubject: {subject}\n\nMessage:\n{message}\n\n(Click Reply to respond directly to {email})"
                 admin_msg = EmailMultiAlternatives(
                     subject=admin_subject,
                     body=admin_text,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    to=[settings.EMAIL_HOST_USER]
+                    to=[admin_recipient],
+                    reply_to=[email]
                 )
                 admin_msg.send(fail_silently=True)
 
         except Exception as e:
-            print(f"SMTP Email Exception: {e}")
+            print(f"SMTP Email Dispatch Warning: {e}")
+            smtp_error = str(e)
             email_sent = False
+
+        if email_sent:
+            response_msg = f"Thank you, {name}! Your message has been sent successfully. A confirmation email has been dispatched to {email}."
+        else:
+            response_msg = f"Thank you, {name}! Your message has been safely received. The admin will review it and get back to you shortly."
 
         return Response({
             "success": True,
-            "message": f"Thank you, {name}! Your message has been sent successfully. A confirmation email has been dispatched to {email}.",
-            "email_sent": email_sent
+            "message": response_msg,
+            "email_sent": email_sent,
+            "id": submission.id
         }, status=status.HTTP_201_CREATED)
 
 
