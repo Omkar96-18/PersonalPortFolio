@@ -99,9 +99,6 @@ export const Navbar = () => {
             <a href="#experience" onClick={e => handleNavClick(e, '#experience')} className="mobile-link">History</a>
             <a href="#contact"    onClick={e => handleNavClick(e, '#contact')}    className="mobile-link">Contact</a>
             <Link to="/blogs" onClick={() => setIsOpen(false)} className={`mobile-link ${isActive('/blogs')}`}>Blog Articles</Link>
-            <Link to="/admin/login" onClick={() => setIsOpen(false)} className="mobile-link" style={{ color: 'var(--accent-red)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <ShieldCheck size={16} /> Admin Portal
-            </Link>
           </div>
         </>
       )}
