@@ -80,7 +80,11 @@ function App() {
     setShowIntro(false);
   };
 
-  const baseName = import.meta.env.BASE_URL || '/';
+  // React Router basename must NOT have a trailing slash.
+  // Vite's BASE_URL is '/PersonalPortFolio/' (trailing slash included), so we strip it.
+  // Without this, routes like /admin/login become //admin/login on GitHub Pages.
+  const rawBase = import.meta.env.BASE_URL || '/';
+  const baseName = rawBase.replace(/\/$/, '') || '/';
 
   return (
     <Router basename={baseName}>
