@@ -67,6 +67,7 @@ REST_FRAMEWORK = {
 
 # CORS Configuration
 cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+print(cors_origins_env)
 if cors_origins_env:
     CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
 else:
@@ -76,7 +77,6 @@ else:
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://omkar96-18.github.io",
-        "https://Omkar96-18.github.io",
     ]
 
 # If CORS_ALLOW_ALL_ORIGINS is explicitly True or in DEBUG mode
