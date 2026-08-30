@@ -13,11 +13,17 @@ class UserProfile(models.Model):
     site_title = models.CharField(max_length=200, blank=True, null=True, help_text="Custom browser tab title and SEO title")
     seo_keywords = models.CharField(max_length=500, blank=True, null=True, help_text="Comma-separated SEO keywords")
     seo_description = models.TextField(blank=True, null=True, help_text="SEO meta description for search engines and social cards")
-    github_url = models.URLField(blank=True, null=True)
-    linkedin_url = models.URLField(blank=True, null=True)
-    resume_url = models.URLField(blank=True, null=True)
+    github_url = models.CharField(max_length=500, blank=True, null=True)
+    linkedin_url = models.CharField(max_length=500, blank=True, null=True)
+    twitter_url = models.CharField(max_length=500, blank=True, null=True, help_text="Twitter / X profile URL")
+    leetcode_url = models.CharField(max_length=500, blank=True, null=True, help_text="LeetCode profile URL")
+    kaggle_url = models.CharField(max_length=500, blank=True, null=True, help_text="Kaggle profile URL")
+    youtube_url = models.CharField(max_length=500, blank=True, null=True, help_text="YouTube channel URL")
+    resume_url = models.CharField(max_length=500, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
+    footer_brand = models.CharField(max_length=100, blank=True, null=True, default="devil37", help_text="Brand name in the footer")
+    footer_text = models.CharField(max_length=300, blank=True, null=True, default="Built with Precision & Performance.", help_text="Custom copyright/tagline text shown in the footer")
 
     def __str__(self):
         return f"{self.name} - {self.title}"
@@ -131,3 +137,31 @@ class ContactSubmission(models.Model):
 
     def __str__(self):
         return f"Message from {self.name} ({self.email})"
+
+class SocialLink(models.Model):
+    ICON_CHOICES = [
+        ("github", "GitHub"),
+        ("linkedin", "LinkedIn"),
+        ("twitter", "Twitter / X"),
+        ("youtube", "YouTube"),
+        ("leetcode", "LeetCode"),
+        ("kaggle", "Kaggle"),
+        ("discord", "Discord"),
+        ("telegram", "Telegram"),
+        ("mail", "Email"),
+        ("instagram", "Instagram"),
+        ("globe", "Website / Globe"),
+        ("link", "Generic Link"),
+    ]
+    platform = models.CharField(max_length=50, choices=ICON_CHOICES, default="github")
+    label = models.CharField(max_length=100, help_text="Display title e.g. GitHub / LinkedIn")
+    url = models.CharField(max_length=500, help_text="Full destination URL or mailto link")
+    icon = models.CharField(max_length=50, blank=True, null=True, help_text="Icon identifier (github, linkedin, twitter, etc.)")
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.label} ({self.platform})"

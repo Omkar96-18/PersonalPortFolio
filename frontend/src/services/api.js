@@ -324,4 +324,37 @@ export const api = {
     });
     return handleResponse(res);
   },
+
+  // Social Links
+  getSocialLinks: async () => {
+    const res = await fetch(`${API_BASE_URL}/social-links/`);
+    const data = await handleResponse(res);
+    return Array.isArray(data) ? data : (data.results || []);
+  },
+
+  createSocialLink: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/social-links/`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    return handleResponse(res);
+  },
+
+  updateSocialLink: async (id, data) => {
+    const res = await fetch(`${API_BASE_URL}/social-links/${id}/`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    return handleResponse(res);
+  },
+
+  deleteSocialLink: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/social-links/${id}/`, {
+      method: "DELETE",
+      headers: getHeaders(),
+    });
+    return handleResponse(res);
+  },
 };

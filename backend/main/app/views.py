@@ -1,11 +1,12 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
-from main.app.models import UserProfile, Skill, Project, Blog, Experience, TerminalCommand, ContactSubmission
+from main.app.models import UserProfile, Skill, Project, Blog, Experience, TerminalCommand, ContactSubmission, SocialLink
 from main.app.serializers import (
     UserSerializer,
     UserProfileSerializer,
@@ -14,7 +15,8 @@ from main.app.serializers import (
     BlogSerializer,
     ExperienceSerializer,
     TerminalCommandSerializer,
-    ContactSubmissionSerializer
+    ContactSubmissionSerializer,
+    SocialLinkSerializer
 )
 
 class CurrentUserView(APIView):
@@ -61,10 +63,26 @@ class ProjectViewSet(viewsets.ModelViewSet):
     lookup_field = "slug"
 
     def get_object(self):
-        lookup_url_kwarg = self.kwargs.get(self.lookup_field)
-        if lookup_url_kwarg and lookup_url_kwarg.isdigit():
-            self.lookup_field = "pk"
-        return super().get_object()
+        queryset = self.filter_queryset(self.get_queryset())
+        lookup_value = self.kwargs.get(self.lookup_field)
+
+        if not lookup_value:
+            from rest_framework.exceptions import NotFound
+            raise NotFound("No identifier provided.")
+
+        obj = None
+        if str(lookup_value).isdigit():
+            obj = queryset.filter(pk=int(lookup_value)).first()
+
+        if not obj:
+            obj = queryset.filter(slug=lookup_value).first()
+
+        if not obj:
+            from django.http import Http404
+            raise Http404("Project not found.")
+
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 class BlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
@@ -77,10 +95,26 @@ class BlogViewSet(viewsets.ModelViewSet):
         return Blog.objects.filter(is_published=True)
 
     def get_object(self):
-        lookup_url_kwarg = self.kwargs.get(self.lookup_field)
-        if lookup_url_kwarg and lookup_url_kwarg.isdigit():
-            self.lookup_field = "pk"
-        return super().get_object()
+        queryset = self.filter_queryset(self.get_queryset())
+        lookup_value = self.kwargs.get(self.lookup_field)
+
+        if not lookup_value:
+            from rest_framework.exceptions import NotFound
+            raise NotFound("No identifier provided.")
+
+        obj = None
+        if str(lookup_value).isdigit():
+            obj = queryset.filter(pk=int(lookup_value)).first()
+
+        if not obj:
+            obj = queryset.filter(slug=lookup_value).first()
+
+        if not obj:
+            from django.http import Http404
+            raise Http404("Blog post not found.")
+
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 class ExperienceViewSet(viewsets.ModelViewSet):
     queryset = Experience.objects.all()
@@ -138,6 +172,28 @@ class ContactSubmissionViewSet(viewsets.ModelViewSet):
     queryset = ContactSubmission.objects.all()
     serializer_class = ContactSubmissionSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class SocialLinkViewSet(viewsets.ModelViewSet):
+    queryset = SocialLink.objects.all()
+    serializer_class = SocialLinkSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            default_links = [
+                {"platform": "github", "label": "GitHub", "url": "https://github.com/omkar96-18/", "icon": "github", "order": 1, "is_active": True},
+                {"platform": "linkedin", "label": "LinkedIn", "url": "https://www.linkedin.com/in/omkar-pardeshi-09b7b7348/", "icon": "linkedin", "order": 2, "is_active": True},
+            ]
+            for link in default_links:
+                SocialLink.objects.create(**link)
+            queryset = self.get_queryset()
+
+        if not request.user.is_authenticated:
+            queryset = queryset.filter(is_active=True)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class ContactSubmissionView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -247,6 +303,7 @@ class ContactSubmissionView(APIView):
 
 
 class ResumeUploadView(APIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
@@ -271,7 +328,12 @@ class ResumeUploadView(APIView):
             default_storage.delete(filename)
             
         saved_path = default_storage.save(filename, file_obj)
-        file_url = request.build_absolute_uri(settings.MEDIA_URL + saved_path)
+        
+        # Determine protocol (detect Render / reverse proxy HTTPS termination)
+        is_https = request.is_secure() or request.headers.get("X-Forwarded-Proto") == "https"
+        scheme = "https" if is_https else request.scheme
+        host = request.get_host()
+        file_url = f"{scheme}://{host}{settings.MEDIA_URL}{saved_path}"
         
         # Update profile if available
         profile = getattr(request.user, "profile", None)
@@ -289,6 +351,7 @@ class ResumeUploadView(APIView):
 
 
 class FaviconUploadView(APIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
@@ -311,7 +374,11 @@ class FaviconUploadView(APIView):
             default_storage.delete(filename)
 
         saved_path = default_storage.save(filename, file_obj)
-        file_url = request.build_absolute_uri(settings.MEDIA_URL + saved_path)
+        
+        is_https = request.is_secure() or request.headers.get("X-Forwarded-Proto") == "https"
+        scheme = "https" if is_https else request.scheme
+        host = request.get_host()
+        file_url = f"{scheme}://{host}{settings.MEDIA_URL}{saved_path}"
 
         profile = getattr(request.user, "profile", None)
         if not profile:
@@ -337,20 +404,24 @@ class ResumeDownloadView(APIView):
     def get(self, request):
         import os
         import mimetypes
-        from django.http import FileResponse, Http404
+        from django.http import FileResponse, Http404, HttpResponseRedirect
 
         profile = UserProfile.objects.first()
         if not profile or not profile.resume_url:
             raise Http404("Resume PDF has not been uploaded yet.")
 
-        resume_url = profile.resume_url
+        resume_url = profile.resume_url.strip()
 
         # If stored as an absolute media URL, extract the relative path
-        if resume_url.startswith("http"):
+        if resume_url.startswith("http://") or resume_url.startswith("https://"):
             from urllib.parse import urlparse
             parsed = urlparse(resume_url)
-            # Strip the leading /media/ prefix to get the relative path
-            relative_path = parsed.path.replace(settings.MEDIA_URL, "", 1).lstrip("/")
+            # Check if this URL points to our media path
+            if settings.MEDIA_URL in parsed.path:
+                relative_path = parsed.path.split(settings.MEDIA_URL, 1)[-1].lstrip("/")
+            else:
+                # External URL (e.g. Google Drive, S3, Cloudinary) -> redirect directly
+                return HttpResponseRedirect(resume_url)
         else:
             relative_path = resume_url.lstrip("/")
             if relative_path.startswith("media/"):
@@ -359,11 +430,17 @@ class ResumeDownloadView(APIView):
         file_path = os.path.join(settings.MEDIA_ROOT, relative_path)
 
         if not os.path.exists(file_path):
-            raise Http404("Resume file not found on server.")
+            # If not found directly, check inside media/resumes/
+            base_filename = os.path.basename(relative_path)
+            fallback_path = os.path.join(settings.MEDIA_ROOT, "resumes", base_filename)
+            if os.path.exists(fallback_path):
+                file_path = fallback_path
+            elif resume_url.startswith("http://") or resume_url.startswith("https://"):
+                return HttpResponseRedirect(resume_url)
+            else:
+                raise Http404("Resume file not found on server.")
 
-        safe_name = os.path.basename(file_path)
         display_name = f"{(profile.name or 'Resume').replace(' ', '_')}_Resume.pdf"
-
         content_type, _ = mimetypes.guess_type(file_path)
         content_type = content_type or "application/pdf"
 
@@ -388,18 +465,21 @@ class ResumeViewView(APIView):
     def get(self, request):
         import os
         import mimetypes
-        from django.http import FileResponse, Http404
+        from django.http import FileResponse, Http404, HttpResponseRedirect
 
         profile = UserProfile.objects.first()
         if not profile or not profile.resume_url:
             raise Http404("Resume PDF has not been uploaded yet.")
 
-        resume_url = profile.resume_url
+        resume_url = profile.resume_url.strip()
 
-        if resume_url.startswith("http"):
+        if resume_url.startswith("http://") or resume_url.startswith("https://"):
             from urllib.parse import urlparse
             parsed = urlparse(resume_url)
-            relative_path = parsed.path.replace(settings.MEDIA_URL, "", 1).lstrip("/")
+            if settings.MEDIA_URL in parsed.path:
+                relative_path = parsed.path.split(settings.MEDIA_URL, 1)[-1].lstrip("/")
+            else:
+                return HttpResponseRedirect(resume_url)
         else:
             relative_path = resume_url.lstrip("/")
             if relative_path.startswith("media/"):
@@ -408,7 +488,14 @@ class ResumeViewView(APIView):
         file_path = os.path.join(settings.MEDIA_ROOT, relative_path)
 
         if not os.path.exists(file_path):
-            raise Http404("Resume file not found on server.")
+            base_filename = os.path.basename(relative_path)
+            fallback_path = os.path.join(settings.MEDIA_ROOT, "resumes", base_filename)
+            if os.path.exists(fallback_path):
+                file_path = fallback_path
+            elif resume_url.startswith("http://") or resume_url.startswith("https://"):
+                return HttpResponseRedirect(resume_url)
+            else:
+                raise Http404("Resume file not found on server.")
 
         content_type, _ = mimetypes.guess_type(file_path)
         content_type = content_type or "application/pdf"

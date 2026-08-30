@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from main.app.models import UserProfile, Skill, Project, Blog, Experience, TerminalCommand, ContactSubmission
+from main.app.models import UserProfile, Skill, Project, Blog, Experience, TerminalCommand, ContactSubmission, SocialLink
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,6 +8,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email"]
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    favicon_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    github_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    linkedin_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    resume_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
     class Meta:
         model = UserProfile
         fields = "__all__"
@@ -19,6 +25,11 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ProjectSerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(required=False, allow_blank=True)
+    long_description = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    image_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    github_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    demo_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     tech_stack_list = serializers.SerializerMethodField()
 
     class Meta:
@@ -30,7 +41,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             return [tech.strip() for tech in obj.tech_stack.split(",") if tech.strip()]
         return []
 
+    def validate_slug(self, value):
+        from django.utils.text import slugify
+        if not value:
+            return ""
+        return slugify(value)
+
 class BlogSerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(required=False, allow_blank=True)
+    cover_image_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    tags = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     tags_list = serializers.SerializerMethodField()
 
     class Meta:
@@ -41,6 +61,12 @@ class BlogSerializer(serializers.ModelSerializer):
         if obj.tags:
             return [tag.strip() for tag in obj.tags.split(",") if tag.strip()]
         return []
+
+    def validate_slug(self, value):
+        from django.utils.text import slugify
+        if not value:
+            return ""
+        return slugify(value)
 
 class ExperienceSerializer(serializers.ModelSerializer):
     description_points = serializers.SerializerMethodField()
@@ -63,3 +89,8 @@ class ContactSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactSubmission
         fields = ["id", "name", "email", "subject", "message", "created_at"]
+
+class SocialLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialLink
+        fields = ["id", "platform", "label", "url", "icon", "order", "is_active"]

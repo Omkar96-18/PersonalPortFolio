@@ -4,10 +4,10 @@ import {
   User, Code, Briefcase, BookOpen, AlertCircle, Plus, Trash2, Edit3, 
   Save, Check, RefreshCw, X, Eye, EyeOff, Image, Palette, Percent,
   Sparkles, ExternalLink, HelpCircle, Layers, Terminal, Mail, MessageSquare,
-  FileText, Upload, Download, Loader2, Globe, LogOut
+  FileText, Upload, Download, Loader2, Globe, LogOut, Share2, Link2, AtSign
 } from 'lucide-react';
 import { api } from '../services/api';
-import { TechBrandIcon } from '../components/BrandIcons';
+import { TechBrandIcon, SocialBrandIcon } from '../components/BrandIcons';
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -26,12 +26,15 @@ export const AdminDashboard = () => {
   const [experiences, setExperiences] = useState([]);
   const [commands, setCommands]       = useState([]);
   const [messages, setMessages]       = useState([]);
+  const [socialLinks, setSocialLinks] = useState([]);
 
   // Form states
   const [bioForm, setBioForm] = useState({ 
     name: '', title: '', bio: '', about_me: '', avatar_url: '', 
     favicon_url: '', site_title: '', seo_keywords: '', seo_description: '',
-    github_url: '', linkedin_url: '', resume_url: '', email: '', location: '' 
+    github_url: '', linkedin_url: '', twitter_url: '', leetcode_url: '',
+    kaggle_url: '', youtube_url: '', resume_url: '', email: '', location: '',
+    footer_brand: 'devil37', footer_text: 'Built with Precision & Performance.'
   });
   
   // Modals / Editing / Adding states
@@ -39,11 +42,12 @@ export const AdminDashboard = () => {
   const [addingItem, setAddingItem] = useState(null);
 
   // Shared generic entry form states
-  const [skillForm, setSkillForm]     = useState({ name: '', category: 'backend', proficiency: '', percentage: 85, icon: 'Code', logo_url: '', color_theme: '#F62440', description: '', order: 0 });
-  const [projectForm, setProjectForm] = useState({ title: '', slug: '', description: '', long_description: '', image_url: '', github_url: '', demo_url: '', tech_stack: '', order: 0 });
-  const [blogForm, setBlogForm]       = useState({ title: '', slug: '', excerpt: '', content: '', cover_image_url: '', tags: '', is_published: false });
-  const [expForm, setExpForm]         = useState({ role: '', company: '', location: '', start_date: '', end_date: '', is_current: false, description: '', order: 0 });
-  const [cmdForm, setCmdForm]         = useState({ command: '', response: '', description: '', order: 0 });
+  const [skillForm, setSkillForm]           = useState({ name: '', category: 'backend', proficiency: '', percentage: 85, icon: 'Code', logo_url: '', color_theme: '#F62440', description: '', order: 0 });
+  const [projectForm, setProjectForm]       = useState({ title: '', slug: '', description: '', long_description: '', image_url: '', github_url: '', demo_url: '', tech_stack: '', order: 0 });
+  const [blogForm, setBlogForm]             = useState({ title: '', slug: '', excerpt: '', content: '', cover_image_url: '', tags: '', is_published: false });
+  const [expForm, setExpForm]               = useState({ role: '', company: '', location: '', start_date: '', end_date: '', is_current: false, description: '', order: 0 });
+  const [cmdForm, setCmdForm]               = useState({ command: '', response: '', description: '', order: 0 });
+  const [socialLinkForm, setSocialLinkForm] = useState({ platform: 'github', label: '', url: '', icon: 'github', order: 0, is_active: true });
 
   useEffect(() => {
     if (!api.isAuthenticated()) {
@@ -57,7 +61,7 @@ export const AdminDashboard = () => {
     setLoading(true);
     setError('');
     try {
-      const [profileRes, skillsRes, projectsRes, blogsRes, experiencesRes, commandsRes, messagesRes] = await Promise.all([
+      const [profileRes, skillsRes, projectsRes, blogsRes, experiencesRes, commandsRes, messagesRes, socialLinksRes] = await Promise.all([
         api.getProfile(),
         api.getSkills(),
         api.getProjects(),
@@ -65,11 +69,12 @@ export const AdminDashboard = () => {
         api.getExperiences(),
         api.getTerminalCommands(),
         api.getContactMessages().catch(() => []),
+        api.getSocialLinks().catch(() => []),
       ]);
 
       if (profileRes) {
         setProfile(profileRes);
-        setBioForm(profileRes);
+        setBioForm(prev => ({ ...prev, ...profileRes }));
       }
       setSkills(skillsRes || []);
       setProjects(projectsRes || []);
@@ -77,6 +82,7 @@ export const AdminDashboard = () => {
       setExperiences(experiencesRes || []);
       setCommands(commandsRes || []);
       setMessages(messagesRes || []);
+      setSocialLinks(socialLinksRes || []);
     } catch (err) {
       console.error("Failed to load admin data", err);
       setError("Failed to sync database. Please check backend connection.");
@@ -132,11 +138,11 @@ export const AdminDashboard = () => {
         if (profile) {
           setProfile(prev => ({ ...prev, resume_url: res.file_url }));
         }
-        showToast("Resume PDF uploaded successfully! Remember to save profile changes.");
+        showToast("Resume PDF uploaded & saved to server successfully!");
       }
     } catch (err) {
       console.error("Resume upload error", err);
-      showToast(err.message || "Failed to upload resume PDF.", "error");
+      showToast(err.message || "Failed to upload resume PDF to server.", "error");
     } finally {
       setUploadingResume(false);
       e.target.value = '';
@@ -161,11 +167,11 @@ export const AdminDashboard = () => {
         // Update browser tab icon immediately
         const fav = document.getElementById('dynamic-favicon');
         if (fav) fav.href = res.file_url;
-        showToast("Head title image / Favicon uploaded and updated live! Remember to save profile changes.");
+        showToast("Title image (Favicon) uploaded & saved to server successfully!");
       }
     } catch (err) {
       console.error("Favicon upload error", err);
-      showToast(err.message || "Failed to upload favicon image.", "error");
+      showToast(err.message || "Failed to upload title image to server.", "error");
     } finally {
       setUploadingFavicon(false);
       e.target.value = '';
@@ -208,16 +214,17 @@ export const AdminDashboard = () => {
     try {
       if (editingItem) {
         const res = await api.updateProject(editingItem.id, projectForm);
-        setProjects(projects.map(p => p.id === res.id ? res : p));
+        setProjects(prev => prev.map(p => p.id === res.id ? res : p));
         showToast("Project details & specs updated! Applied immediately to live website.");
       } else {
         const res = await api.createProject(projectForm);
-        setProjects([...projects, res]);
+        setProjects(prev => [...prev, res]);
         showToast("New Project added! Applied immediately to live website.");
       }
       closeForms();
     } catch (err) {
-      showToast("Failed to save project.", "error");
+      console.error("Project submit error:", err);
+      showToast("Failed to save project: " + (err.message || ''), "error");
     }
   };
 
@@ -225,10 +232,10 @@ export const AdminDashboard = () => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
     try {
       await api.deleteProject(id);
-      setProjects(projects.filter(p => p.id !== id));
+      setProjects(prev => prev.filter(p => p.id !== id));
       showToast("Project deleted.");
     } catch (err) {
-      showToast("Failed to delete project.", "error");
+      showToast("Failed to delete project: " + (err.message || ''), "error");
     }
   };
 
@@ -238,16 +245,17 @@ export const AdminDashboard = () => {
     try {
       if (editingItem) {
         const res = await api.updateBlog(editingItem.id, blogForm);
-        setBlogs(blogs.map(b => b.id === res.id ? res : b));
+        setBlogs(prev => prev.map(b => b.id === res.id ? res : b));
         showToast("Blog post updated! Applied immediately to live website.");
       } else {
         const res = await api.createBlog(blogForm);
-        setBlogs([res, ...blogs]);
+        setBlogs(prev => [res, ...prev]);
         showToast("New Blog post published! Visible immediately on live website.");
       }
       closeForms();
     } catch (err) {
-      showToast("Failed to save blog.", "error");
+      console.error("Blog submit error:", err);
+      showToast("Failed to save blog: " + (err.message || ''), "error");
     }
   };
 
@@ -255,10 +263,10 @@ export const AdminDashboard = () => {
     if (!window.confirm("Are you sure you want to delete this blog post?")) return;
     try {
       await api.deleteBlog(id);
-      setBlogs(blogs.filter(b => b.id !== id));
+      setBlogs(prev => prev.filter(b => b.id !== id));
       showToast("Blog post removed.");
     } catch (err) {
-      showToast("Failed to delete blog post.", "error");
+      showToast("Failed to delete blog post: " + (err.message || ''), "error");
     }
   };
 
@@ -333,6 +341,47 @@ export const AdminDashboard = () => {
     }
   };
 
+  // SOCIAL LINK operations
+  const handleSocialLinkSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingItem) {
+        const res = await api.updateSocialLink(editingItem.id, socialLinkForm);
+        setSocialLinks(prev => prev.map(s => s.id === res.id ? res : s));
+        showToast("Social link updated! Visible immediately on footer.");
+      } else {
+        const res = await api.createSocialLink(socialLinkForm);
+        setSocialLinks(prev => [...prev, res]);
+        showToast("New social link added to footer!");
+      }
+      closeForms();
+    } catch (err) {
+      console.error("Social link save error:", err);
+      showToast("Failed to save social link: " + (err.message || ''), "error");
+    }
+  };
+
+  const deleteSocial = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this social link?")) return;
+    try {
+      await api.deleteSocialLink(id);
+      setSocialLinks(prev => prev.filter(s => s.id !== id));
+      showToast("Social link removed from footer.");
+    } catch (err) {
+      showToast("Failed to delete social link: " + (err.message || ''), "error");
+    }
+  };
+
+  const toggleSocialActive = async (link) => {
+    try {
+      const res = await api.updateSocialLink(link.id, { ...link, is_active: !link.is_active });
+      setSocialLinks(prev => prev.map(s => s.id === res.id ? res : s));
+      showToast(`Social link ${res.is_active ? 'enabled' : 'hidden'} on footer.`);
+    } catch (err) {
+      showToast("Failed to update status: " + (err.message || ''), "error");
+    }
+  };
+
   const closeForms = () => {
     setEditingItem(null);
     setAddingItem(null);
@@ -341,6 +390,7 @@ export const AdminDashboard = () => {
     setBlogForm({ title: '', slug: '', excerpt: '', content: '', cover_image_url: '', tags: '', is_published: false });
     setExpForm({ role: '', company: '', location: '', start_date: '', end_date: '', is_current: false, description: '', order: 0 });
     setCmdForm({ command: '', response: '', description: '', order: 0 });
+    setSocialLinkForm({ platform: 'github', label: '', url: '', icon: 'github', order: 0, is_active: true });
   };
 
   const startAdd = (type) => {
@@ -351,21 +401,73 @@ export const AdminDashboard = () => {
   const startEdit = (type, item) => {
     closeForms();
     setEditingItem(item);
-    if (type === 'skill') setSkillForm({ ...item, percentage: item.percentage ?? 85, logo_url: item.logo_url || '', color_theme: item.color_theme || '#F62440', description: item.description || '' });
-    if (type === 'project') setProjectForm({
-      title: item.title || '',
-      slug: item.slug || '',
-      description: item.description || '',
-      long_description: item.long_description || '',
-      image_url: item.image_url || '',
-      github_url: item.github_url || '',
-      demo_url: item.demo_url || '',
-      tech_stack: item.tech_stack || (item.tech_stack_list ? item.tech_stack_list.join(', ') : ''),
-      order: item.order || 0
-    });
-    if (type === 'blog') setBlogForm({ ...item, tags: item.tags || (item.tags_list ? item.tags_list.join(', ') : '') });
-    if (type === 'experience') setExpForm(item);
-    if (type === 'terminal') setCmdForm(item);
+    if (type === 'skill') {
+      setSkillForm({
+        name: item.name || '',
+        category: item.category || 'backend',
+        proficiency: item.proficiency || '',
+        percentage: item.percentage ?? 85,
+        icon: item.icon || 'Code',
+        logo_url: item.logo_url || '',
+        color_theme: item.color_theme || '#F62440',
+        description: item.description || '',
+        order: item.order || 0
+      });
+    }
+    if (type === 'project') {
+      setProjectForm({
+        title: item.title || '',
+        slug: item.slug || '',
+        description: item.description || '',
+        long_description: item.long_description || '',
+        image_url: item.image_url || '',
+        github_url: item.github_url || '',
+        demo_url: item.demo_url || '',
+        tech_stack: item.tech_stack || (item.tech_stack_list ? item.tech_stack_list.join(', ') : ''),
+        order: item.order || 0
+      });
+    }
+    if (type === 'blog') {
+      setBlogForm({
+        title: item.title || '',
+        slug: item.slug || '',
+        excerpt: item.excerpt || '',
+        content: item.content || '',
+        cover_image_url: item.cover_image_url || '',
+        tags: item.tags || (item.tags_list ? item.tags_list.join(', ') : ''),
+        is_published: item.is_published !== undefined ? item.is_published : true
+      });
+    }
+    if (type === 'experience') {
+      setExpForm({
+        role: item.role || '',
+        company: item.company || '',
+        location: item.location || '',
+        start_date: item.start_date || '',
+        end_date: item.end_date || '',
+        is_current: item.is_current || false,
+        description: item.description || '',
+        order: item.order || 0
+      });
+    }
+    if (type === 'terminal') {
+      setCmdForm({
+        command: item.command || '',
+        response: item.response || '',
+        description: item.description || '',
+        order: item.order || 0
+      });
+    }
+    if (type === 'social') {
+      setSocialLinkForm({
+        platform: item.platform || 'github',
+        label: item.label || '',
+        url: item.url || '',
+        icon: item.icon || item.platform || 'github',
+        order: item.order || 0,
+        is_active: item.is_active !== undefined ? item.is_active : true
+      });
+    }
   };
 
   const colorPresets = [
@@ -416,6 +518,9 @@ export const AdminDashboard = () => {
         <div className="admin-sidebar glass-panel">
           <button className={`admin-tab ${activeTab === 'bio' ? 'active' : ''}`} onClick={() => { setActiveTab('bio'); closeForms(); }}>
             <User size={18} /> Profile &amp; Bio
+          </button>
+          <button className={`admin-tab ${activeTab === 'footer' ? 'active' : ''}`} onClick={() => { setActiveTab('footer'); closeForms(); }}>
+            <Share2 size={18} /> Footer &amp; Social Links ({socialLinks.length})
           </button>
           <button className={`admin-tab ${activeTab === 'messages' ? 'active' : ''}`} onClick={() => { setActiveTab('messages'); closeForms(); }}>
             <Mail size={18} /> Visitor Inbox ({messages.length})
@@ -623,11 +728,44 @@ export const AdminDashboard = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label">GitHub Profile URL</label>
-                    <input type="url" className="form-control" value={bioForm.github_url || ''} onChange={(e) => setBioForm({ ...bioForm, github_url: e.target.value })} />
+                    <input type="url" className="form-control" value={bioForm.github_url || ''} onChange={(e) => setBioForm({ ...bioForm, github_url: e.target.value })} placeholder="https://github.com/..." />
                   </div>
                   <div className="form-group">
                     <label className="form-label">LinkedIn Profile URL</label>
-                    <input type="url" className="form-control" value={bioForm.linkedin_url || ''} onChange={(e) => setBioForm({ ...bioForm, linkedin_url: e.target.value })} />
+                    <input type="url" className="form-control" value={bioForm.linkedin_url || ''} onChange={(e) => setBioForm({ ...bioForm, linkedin_url: e.target.value })} placeholder="https://linkedin.com/in/..." />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">Twitter / X Profile URL</label>
+                    <input type="url" className="form-control" value={bioForm.twitter_url || ''} onChange={(e) => setBioForm({ ...bioForm, twitter_url: e.target.value })} placeholder="https://x.com/..." />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">LeetCode Profile URL</label>
+                    <input type="url" className="form-control" value={bioForm.leetcode_url || ''} onChange={(e) => setBioForm({ ...bioForm, leetcode_url: e.target.value })} placeholder="https://leetcode.com/u/..." />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">Kaggle Profile URL</label>
+                    <input type="url" className="form-control" value={bioForm.kaggle_url || ''} onChange={(e) => setBioForm({ ...bioForm, kaggle_url: e.target.value })} placeholder="https://kaggle.com/..." />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">YouTube Channel URL</label>
+                    <input type="url" className="form-control" value={bioForm.youtube_url || ''} onChange={(e) => setBioForm({ ...bioForm, youtube_url: e.target.value })} placeholder="https://youtube.com/@..." />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">Footer Brand Display Name</label>
+                    <input type="text" className="form-control" value={bioForm.footer_brand || 'devil37'} onChange={(e) => setBioForm({ ...bioForm, footer_brand: e.target.value })} placeholder="e.g. devil37" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Footer Copyright / Subtitle Text</label>
+                    <input type="text" className="form-control" value={bioForm.footer_text || 'Built with Precision & Performance.'} onChange={(e) => setBioForm({ ...bioForm, footer_text: e.target.value })} placeholder="e.g. Built with Precision & Performance." />
                   </div>
                 </div>
 
@@ -635,6 +773,169 @@ export const AdminDashboard = () => {
                   <button type="submit" className="btn btn-primary"><Save size={16} /> Save Profile Changes</button>
                 </div>
               </form>
+            </div>
+          )}
+
+          {/* TAB: FOOTER & SOCIAL LINKS */}
+          {activeTab === 'footer' && !addingItem && !editingItem && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+              {/* Card 1: Footer Branding & Copyright Customizer */}
+              <div className="glass-panel main-panel-card">
+                <div className="panel-header-row">
+                  <h2 className="panel-title">Footer Brand &amp; Global Text Customizer</h2>
+                </div>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '20px' }}>
+                  Customize the brand logo name, dynamic copyright text, and global social channels displayed across every page in the website footer.
+                </p>
+
+                {/* Live Footer Preview */}
+                <div style={{ 
+                  background: 'var(--bg-secondary)', 
+                  border: '1px solid var(--border-color)', 
+                  borderRadius: '8px', 
+                  padding: '16px 20px', 
+                  marginBottom: '24px',
+                  position: 'relative'
+                }}>
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent 0%, var(--accent-red) 50%, transparent 100%)', opacity: 0.5 }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+                        {(bioForm.footer_brand || 'devil37').replace(/\d+$/, '')}
+                        <span style={{ color: 'var(--accent-red)' }}>{(bioForm.footer_brand || 'devil37').match(/\d+$/)?.[0] || ''}</span>
+                      </span>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                        © {new Date().getFullYear()} — {bioForm.footer_text || 'Built with Precision & Performance.'}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      {socialLinks.filter(s => s.is_active).map((link, i) => (
+                        <span key={link.id || i} title={link.label} style={{ color: 'var(--text-muted)' }}>
+                          <SocialBrandIcon platform={link.platform} icon={link.icon} size={15} />
+                        </span>
+                      ))}
+                      {socialLinks.filter(s => s.is_active).length === 0 && (
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>No active social icons</span>
+                      )}
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '8px', fontSize: '0.7rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>
+                    ⚡ Live Footer Preview
+                  </div>
+                </div>
+
+                <form onSubmit={handleBioSubmit}>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label className="form-label">Footer Brand Display Name *</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={bioForm.footer_brand || 'devil37'} 
+                        onChange={(e) => setBioForm({ ...bioForm, footer_brand: e.target.value })} 
+                        required 
+                        placeholder="e.g. devil37, omkar37, JohnDoe" 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Footer Tagline / Copyright Text *</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={bioForm.footer_text || 'Built with Precision & Performance.'} 
+                        onChange={(e) => setBioForm({ ...bioForm, footer_text: e.target.value })} 
+                        required 
+                        placeholder="e.g. Built with Precision & Performance. or Architected in the Void." 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-actions" style={{ marginTop: '10px' }}>
+                    <button type="submit" className="btn btn-primary"><Save size={16} /> Save Footer Settings</button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Card 2: Custom Social Media Links Manager */}
+              <div className="glass-panel main-panel-card">
+                <div className="panel-header-row">
+                  <div>
+                    <h2 className="panel-title">Footer Social Media Links ({socialLinks.length})</h2>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', margin: '4px 0 0 0' }}>
+                      Add, reorder, or toggle social media badges (GitHub, LinkedIn, Twitter/X, LeetCode, Kaggle, YouTube, Discord, Telegram, Email, etc.)
+                    </p>
+                  </div>
+                  <button onClick={() => startAdd('social')} className="btn btn-primary btn-sm"><Plus size={15} /> Add Social Link</button>
+                </div>
+
+                {socialLinks.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                    <Share2 size={36} style={{ marginBottom: '12px', opacity: 0.5, color: 'var(--accent-red)' }} />
+                    <h3>No social links registered</h3>
+                    <p>Click "Add Social Link" above to add your first social media icon.</p>
+                  </div>
+                ) : (
+                  <div className="table-responsive">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Icon &amp; Platform</th>
+                          <th>Display Label</th>
+                          <th>Destination URL</th>
+                          <th>Sort Order</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {socialLinks.map(link => (
+                          <tr key={link.id}>
+                            <td>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <div style={{ 
+                                  width: '32px', height: '32px', borderRadius: '6px', 
+                                  background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)',
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                  color: 'var(--accent-red)'
+                                }}>
+                                  <SocialBrandIcon platform={link.platform} icon={link.icon} size={16} />
+                                </div>
+                                <span style={{ textTransform: 'capitalize', fontWeight: 600 }}>{link.platform}</span>
+                              </div>
+                            </td>
+                            <td><strong>{link.label}</strong></td>
+                            <td>
+                              <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                                <span style={{ maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{link.url}</span>
+                                <ExternalLink size={12} />
+                              </a>
+                            </td>
+                            <td>{link.order}</td>
+                            <td>
+                              <button 
+                                onClick={() => toggleSocialActive(link)}
+                                className="badge"
+                                style={{ 
+                                  cursor: 'pointer', border: 'none',
+                                  background: link.is_active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
+                                  color: link.is_active ? '#10b981' : '#ef4444'
+                                }}
+                                title="Click to toggle visibility in footer"
+                              >
+                                {link.is_active ? <><Eye size={12} /> Active</> : <><EyeOff size={12} /> Hidden</>}
+                              </button>
+                            </td>
+                            <td className="actions-cell">
+                              <button onClick={() => startEdit('social', link)} className="action-btn edit-action" title="Edit social link"><Edit3 size={15} /></button>
+                              <button onClick={() => deleteSocial(link.id)} className="action-btn delete-action" title="Delete social link"><Trash2 size={15} /></button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -941,7 +1242,7 @@ export const AdminDashboard = () => {
           )}
 
           {/* SUB-FORMS: Terminal Command Editor Form */}
-          {(addingItem === 'terminal' || editingItem?.command !== undefined) && activeTab === 'terminal' && (
+          {(addingItem === 'terminal' || (editingItem && activeTab === 'terminal')) && activeTab === 'terminal' && (
             <div className="glass-panel main-panel-card">
               <h2 className="panel-title">{editingItem ? `Edit Terminal Command '$ ${editingItem.command}'` : "Add New Terminal Prompt Command"}</h2>
               <form onSubmit={handleCmdSubmit}>
@@ -975,7 +1276,7 @@ export const AdminDashboard = () => {
           )}
 
           {/* SUB-FORMS: Skill Editor Form */}
-          {(addingItem === 'skill' || editingItem?.category !== undefined) && activeTab === 'skills' && (
+          {(addingItem === 'skill' || (editingItem && activeTab === 'skills')) && activeTab === 'skills' && (
             <div className="glass-panel main-panel-card">
               <h2 className="panel-title">{editingItem ? "Edit Skill Details" : "Create New Skill Tag"}</h2>
               <form onSubmit={handleSkillSubmit}>
@@ -1091,7 +1392,7 @@ export const AdminDashboard = () => {
           )}
 
           {/* SUB-FORMS: Project Editor Form */}
-          {(addingItem === 'project' || editingItem?.tech_stack !== undefined) && activeTab === 'projects' && (
+          {(addingItem === 'project' || (editingItem && activeTab === 'projects')) && activeTab === 'projects' && (
             <div className="glass-panel main-panel-card">
               <h2 className="panel-title">{editingItem ? "Edit Project Details & Architecture Specs" : "Add Project to Portfolio"}</h2>
               <form onSubmit={handleProjectSubmit}>
@@ -1156,7 +1457,7 @@ export const AdminDashboard = () => {
           )}
 
           {/* SUB-FORMS: Blog Editor Form */}
-          {(addingItem === 'blog' || editingItem?.excerpt !== undefined) && activeTab === 'blogs' && (
+          {(addingItem === 'blog' || (editingItem && activeTab === 'blogs')) && activeTab === 'blogs' && (
             <div className="glass-panel main-panel-card">
               <h2 className="panel-title">{editingItem ? "Edit Blog Article" : "Write New Technical Post"}</h2>
               <form onSubmit={handleBlogSubmit}>
@@ -1206,7 +1507,7 @@ export const AdminDashboard = () => {
           )}
 
           {/* SUB-FORMS: Experience Editor Form */}
-          {(addingItem === 'experience' || editingItem?.role !== undefined) && activeTab === 'experience' && (
+          {(addingItem === 'experience' || (editingItem && activeTab === 'experience')) && activeTab === 'experience' && (
             <div className="glass-panel main-panel-card">
               <h2 className="panel-title">{editingItem ? "Edit Experience Record" : "Add Career Experience"}</h2>
               <form onSubmit={handleExpSubmit}>
@@ -1249,6 +1550,107 @@ export const AdminDashboard = () => {
 
                 <div className="form-actions">
                   <button type="submit" className="btn btn-primary"><Save size={16} /> Save Record</button>
+                  <button type="button" onClick={closeForms} className="btn btn-secondary"><X size={16} /> Cancel</button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* SUB-FORMS: Social Link Editor Form */}
+          {(addingItem === 'social' || (editingItem && activeTab === 'footer')) && activeTab === 'footer' && (
+            <div className="glass-panel main-panel-card">
+              <h2 className="panel-title">{editingItem ? `Edit Social Link (${editingItem.label || editingItem.platform})` : "Add New Footer Social Link"}</h2>
+              <form onSubmit={handleSocialLinkSubmit}>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label">Platform Platform / Brand *</label>
+                    <select 
+                      className="form-control" 
+                      value={socialLinkForm.platform} 
+                      onChange={(e) => {
+                        const p = e.target.value;
+                        setSocialLinkForm({
+                          ...socialLinkForm,
+                          platform: p,
+                          icon: p,
+                          label: socialLinkForm.label || (p.charAt(0).toUpperCase() + p.slice(1))
+                        });
+                      }}
+                    >
+                      <option value="github">GitHub</option>
+                      <option value="linkedin">LinkedIn</option>
+                      <option value="twitter">Twitter / X</option>
+                      <option value="youtube">YouTube</option>
+                      <option value="leetcode">LeetCode</option>
+                      <option value="kaggle">Kaggle</option>
+                      <option value="discord">Discord</option>
+                      <option value="telegram">Telegram</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="mail">Email / Mailto</option>
+                      <option value="globe">Personal Website / Portfolio</option>
+                      <option value="link">Custom URL Link</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Display Title / Label *</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={socialLinkForm.label} 
+                      onChange={(e) => setSocialLinkForm({ ...socialLinkForm, label: e.target.value })} 
+                      required 
+                      placeholder="e.g. GitHub, LeetCode, Twitter" 
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 2 }}>
+                    <label className="form-label">Destination URL or Mailto *</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      value={socialLinkForm.url} 
+                      onChange={(e) => setSocialLinkForm({ ...socialLinkForm, url: e.target.value })} 
+                      required 
+                      placeholder="https://github.com/username or mailto:you@example.com" 
+                    />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">Sort Weight Order</label>
+                    <input 
+                      type="number" 
+                      className="form-control" 
+                      value={socialLinkForm.order} 
+                      onChange={(e) => setSocialLinkForm({ ...socialLinkForm, order: parseInt(e.target.value) || 0 })} 
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '18px 0' }}>
+                  <input 
+                    type="checkbox" 
+                    id="is_social_active" 
+                    checked={socialLinkForm.is_active} 
+                    onChange={(e) => setSocialLinkForm({ ...socialLinkForm, is_active: e.target.checked })} 
+                    style={{ width: '18px', height: '18px', cursor: 'pointer' }} 
+                  />
+                  <label htmlFor="is_social_active" className="form-label" style={{ margin: 0, cursor: 'pointer' }}>
+                    Display icon in website footer (Active)
+                  </label>
+                </div>
+
+                {/* Real-time icon preview */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', marginBottom: '20px', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Selected Icon Preview:</span>
+                  <div style={{ color: 'var(--accent-red)', display: 'flex', alignItems: 'center' }}>
+                    <SocialBrandIcon platform={socialLinkForm.platform} icon={socialLinkForm.icon} size={20} />
+                  </div>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>{socialLinkForm.label || socialLinkForm.platform}</span>
+                </div>
+
+                <div className="form-actions">
+                  <button type="submit" className="btn btn-primary"><Save size={16} /> Save Social Link</button>
                   <button type="button" onClick={closeForms} className="btn btn-secondary"><X size={16} /> Cancel</button>
                 </div>
               </form>

@@ -5,14 +5,15 @@ Django settings for main project.
 import os
 from pathlib import Path
 from urllib.parse import urlparse
-from dotenv import load_dotenv
-import dj_database_url
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables
-load_dotenv(BASE_DIR / ".env")
+try:
+    from dotenv import load_dotenv
+    # Load environment variables
+    load_dotenv(BASE_DIR / ".env")
+except ImportError:
+    pass
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-o$2u_)yn12b)v=k!$&*^d!cp#f+2m$f3wkmzbl=ubdm)f=w!46")
@@ -22,11 +23,10 @@ DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = ["*"]  # Configured for development/deployment flexibility
 
- # Render provides an environment variable called RENDER
-if os.environ.get('RENDER'):
-    ALLOWED_HOSTS.append(os.environ.get('RENDER_EXTERNAL_HOSTNAME'))
-else:
-    ALLOWED_HOSTS = ['*'] # Fallback for local testing
+ALLOWED_HOSTS = ['*']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 # Application definition
 
@@ -79,11 +79,16 @@ else:
         "https://omkar96-18.github.io",
     ]
 
-# If CORS_ALLOW_ALL_ORIGINS is explicitly True or in DEBUG mode
-if os.environ.get("CORS_ALLOW_ALL_ORIGINS", "").lower() == "true" or DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://omkar96-18.github.io",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://*.onrender.com",
+]
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -120,10 +125,10 @@ WSGI_APPLICATION = "main.wsgi.application"
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
     try:
+        import dj_database_url
         DATABASES = {
             'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
         }
-        
     except Exception as e:
         print(f"Failed to parse DATABASE_URL: {e}. Falling back to SQLite.")
         DATABASES = {
@@ -171,6 +176,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# File Upload Settings (Allow up to 25MB for resumes and high-res media)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 26214400  # 25 MB
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
 
 
 # SMTP Email Configuration (Supports EMAIL_ADDRESS / EMAIL_PASS and standard EMAIL_HOST_USER / EMAIL_HOST_PASSWORD)
